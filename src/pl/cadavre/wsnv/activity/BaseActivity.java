@@ -70,6 +70,11 @@ public class BaseActivity extends Activity {
         }
     }
 
+    /**
+     * Check if Internet connection is accessible
+     * 
+     * @return boolean
+     */
     protected boolean hasInternetConnection() {
 
         if (networkInfo != null && networkInfo.isConnected()) {
@@ -79,6 +84,11 @@ public class BaseActivity extends Activity {
         }
     }
 
+    /**
+     * Get network connection type - WiFi or Mobile data
+     * 
+     * @return int
+     */
     protected int getNetworkType() {
 
         NetworkInfo currentNetwork = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -89,6 +99,11 @@ public class BaseActivity extends Activity {
         return isWifiConn ? NETWORK_WIFI : (isMobileConn ? NETWORK_MOBILE : null);
     }
 
+    /**
+     * Check if SharedPreferences contains data necessary to connect to database
+     * 
+     * @return boolean
+     */
     protected boolean hasNecessaryPreferences() {
 
         if (preferences.contains(PreferencesConstants.DB_HOST)
@@ -102,21 +117,29 @@ public class BaseActivity extends Activity {
         return false;
     }
 
+    /**
+     * Display OK dialog with resulting Activity.finish()
+     * 
+     * @param title
+     * @param content
+     */
     void showOKDialog(int title, int content) {
 
         showOKDialog(title, content, null);
     }
 
+    /**
+     * Display OK dialog with listener callback
+     * 
+     * @param title
+     * @param content
+     * @param listener
+     */
     void showOKDialog(int title, int content, OnOKClickListener listener) {
 
         OKDialogFragment newFragment = OKDialogFragment.newInstance(title, content);
         newFragment.setOnOKClickListener(listener);
         newFragment.show(getFragmentManager(), "okdialog");
-    }
-
-    public void handleOKDialogPress() {
-
-        finish();
     }
 
 }

@@ -31,7 +31,7 @@ public class OKDialogFragment extends DialogFragment {
      * 
      * @param title Resource ID for title
      * @param content Resource ID for content
-     * @return OKDialog
+     * @return OKDialogFragment
      */
     public static OKDialogFragment newInstance(int title, int content) {
 
