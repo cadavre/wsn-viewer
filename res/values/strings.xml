@@ -1,0 +1,40 @@
+<resources>
+
+    <!-- Global -->
+    <string name="app_name">WSN Viewer</string>
+    <!-- Labels -->
+    <string name="info">Information</string>
+    <string name="warning">Warning</string>
+    <string name="success">Success</string>
+    <string name="error">Error</string>
+    <!-- Error contents -->
+    <string name="error_no_internet_connection">Please connect to the Internet before you start using WSN Viewer.</string>
+    <!-- Settings labels -->
+    <string name="db_settings">Database connection</string>
+    <string name="db_local_settings">Local database connection</string>
+    <!-- DB host -->
+    <string name="db_host_title">Host address</string>
+    <string name="db_host_summary">IP address or resolvable URL</string>
+    <!-- DB localhost -->
+    <string name="db_localhost_title">Localhost address</string>
+    <string name="db_localhost_summary">Local network IP address</string>
+    <!-- DB port -->
+    <string name="db_port_title">Port number</string>
+    <string name="db_port_summary"></string>
+    <!-- DB database -->
+    <string name="db_database_title">Database name</string>
+    <string name="db_database_summary"></string>
+    <!-- DB user -->
+    <string name="db_user_title">Username</string>
+    <string name="db_user_summary"></string>
+    <!-- DB password -->
+    <string name="db_password_title">Password</string>
+    <string name="db_password_summary"></string>
+    <!-- DB name -->
+    <string name="db_name_title">Connection name</string>
+    <string name="db_name_summary">Visible connection name</string>
+    <!-- Local WiFi SSID -->
+    <string name="local_wifi_ssid_title">Local SSID</string>
+    <string name="local_wifi_ssid_summary">Local connection Wi-Fi SSID</string>
+
+</resources>
