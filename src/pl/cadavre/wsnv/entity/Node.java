@@ -16,11 +16,11 @@ public class Node {
 
     private String location;
 
-    private double x;
+    private double x = 0;
 
-    private double y;
+    private double y = 0;
 
-    private double z;
+    private double z = 0;
 
     /**
      * @return the id
