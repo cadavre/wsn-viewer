@@ -4,46 +4,43 @@
         <EditTextPreference
             android:dialogTitle="@string/db_host_title"
             android:key="db_host"
-            android:summary="@string/db_host_summary"
+            android:summary="@string/required"
             android:title="@string/db_host_title" />
         <EditTextPreference
             android:defaultValue="5432"
             android:dialogTitle="@string/db_port_title"
             android:key="db_port"
-            android:summary="@string/db_port_summary"
+            android:summary="@string/required"
             android:title="@string/db_port_title" />
         <EditTextPreference
             android:dialogTitle="@string/db_database_title"
             android:key="db_database"
-            android:summary="@string/db_database_summary"
+            android:summary="@string/required"
             android:title="@string/db_database_title" />
         <EditTextPreference
             android:dialogTitle="@string/db_user_title"
             android:key="db_user"
-            android:summary="@string/db_user_summary"
+            android:summary="@string/required"
             android:title="@string/db_user_title" />
         <EditTextPreference
             android:dialogTitle="@string/db_password_title"
             android:key="db_password"
-            android:summary="@string/db_password_summary"
+            android:summary="@string/required"
             android:title="@string/db_password_title" />
         <EditTextPreference
             android:dialogTitle="@string/db_name_title"
             android:key="db_name"
-            android:summary="@string/db_name_summary"
             android:title="@string/db_name_title" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/db_local_settings" >
         <EditTextPreference
             android:dialogTitle="@string/db_localhost_title"
             android:key="db_localhost"
-            android:summary="@string/db_localhost_summary"
             android:title="@string/db_localhost_title" />
 
         <ListPreference
             android:dialogTitle="@string/local_wifi_ssid_title"
             android:key="local_wifi_ssid"
-            android:summary="@string/local_wifi_ssid_summary"
             android:title="@string/local_wifi_ssid_title" />
     </PreferenceCategory>
 

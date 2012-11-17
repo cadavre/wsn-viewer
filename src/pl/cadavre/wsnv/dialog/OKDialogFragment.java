@@ -1,6 +1,7 @@
 
 package pl.cadavre.wsnv.dialog;
 
+import pl.cadavre.wsnv.R;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -51,15 +52,13 @@ public class OKDialogFragment extends DialogFragment {
         int title = getArguments().getInt("title");
         int content = getArguments().getInt("content");
 
-        return new AlertDialog.Builder(getActivity()).setIcon(android.R.drawable.ic_popup_reminder)
+        return new AlertDialog.Builder(getActivity()).setIcon(R.drawable.ic_error)
                 .setTitle(title).setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
 
                         if (onOKClickListener != null) {
                             onOKClickListener.onOKClicked();
-                        } else {
-                            getActivity().finish();
                         }
                     }
                 }).setMessage(content).create();

@@ -1,18 +1,13 @@
 
 package pl.cadavre.wsnv.activity;
 
-import pl.cadavre.wsnv.PreferencesConstants;
 import pl.cadavre.wsnv.R;
+import pl.cadavre.wsnv.WSNViewer;
 import pl.cadavre.wsnv.dialog.OKDialogFragment;
 import pl.cadavre.wsnv.dialog.OKDialogFragment.OnOKClickListener;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 /**
  * Main Activity with Network handling
@@ -23,39 +18,21 @@ public class BaseActivity extends Activity {
 
     public static final String TAG = "WSNV";
 
-    public static final int NETWORK_WIFI = 1;
-
-    public static final int NETWORK_MOBILE = 2;
-
-    ConnectivityManager connMgr;
-
-    NetworkInfo networkInfo;
-
-    SharedPreferences preferences;
+    private WSNViewer application;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        application = (WSNViewer) getApplicationContext();
 
-        connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        networkInfo = connMgr.getActiveNetworkInfo();
-        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        if (!getClass().getCanonicalName().equals(
-                "pl.cadavre.wsnv.activity.ConnectionPreferenceActivity")
-                && !hasNecessaryPreferences()) {
-            Intent connSettingIntent = new Intent(this, ConnectionPreferenceActivity.class);
-            startActivity(connSettingIntent);
-            finish();
-        }
     }
 
     @Override
     protected void onStart() {
 
         super.onStart();
-        if (!hasInternetConnection()) {
+        if (!getApp().hasInternetConnection()) {
             OnOKClickListener onOK = new OnOKClickListener() {
 
                 public void onOKClicked() {
@@ -65,56 +42,12 @@ public class BaseActivity extends Activity {
                 }
             };
             showOKDialog(R.string.error, R.string.error_no_internet_connection, onOK);
-        } else {
-            getNetworkType();
         }
     }
 
-    /**
-     * Check if Internet connection is accessible
-     * 
-     * @return boolean
-     */
-    protected boolean hasInternetConnection() {
+    public WSNViewer getApp() {
 
-        if (networkInfo != null && networkInfo.isConnected()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Get network connection type - WiFi or Mobile data
-     * 
-     * @return int
-     */
-    protected int getNetworkType() {
-
-        NetworkInfo currentNetwork = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        boolean isWifiConn = currentNetwork.isConnected();
-        currentNetwork = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        boolean isMobileConn = currentNetwork.isConnected();
-
-        return isWifiConn ? NETWORK_WIFI : (isMobileConn ? NETWORK_MOBILE : null);
-    }
-
-    /**
-     * Check if SharedPreferences contains data necessary to connect to database
-     * 
-     * @return boolean
-     */
-    protected boolean hasNecessaryPreferences() {
-
-        if (preferences.contains(PreferencesConstants.DB_HOST)
-                && preferences.contains(PreferencesConstants.DB_PORT)
-                && preferences.contains(PreferencesConstants.DB_DATABASE)
-                && preferences.contains(PreferencesConstants.DB_USER)
-                && preferences.contains(PreferencesConstants.DB_PASSWORD)) {
-            return true;
-        }
-
-        return false;
+        return application;
     }
 
     /**
@@ -123,7 +56,7 @@ public class BaseActivity extends Activity {
      * @param title
      * @param content
      */
-    void showOKDialog(int title, int content) {
+    public void showOKDialog(int title, int content) {
 
         showOKDialog(title, content, null);
     }
@@ -135,7 +68,7 @@ public class BaseActivity extends Activity {
      * @param content
      * @param listener
      */
-    void showOKDialog(int title, int content, OnOKClickListener listener) {
+    public void showOKDialog(int title, int content, OnOKClickListener listener) {
 
         OKDialogFragment newFragment = OKDialogFragment.newInstance(title, content);
         newFragment.setOnOKClickListener(listener);
