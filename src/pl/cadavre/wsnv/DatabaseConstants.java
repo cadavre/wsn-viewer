@@ -45,7 +45,7 @@ public class DatabaseConstants {
 
         public static final String VOLTAGE = "voltage";
 
-        public static final String TEMP = "temp";
+        public static final String TEMPERATURE = "temp";
 
         public static final String LIGHT = "light";
 

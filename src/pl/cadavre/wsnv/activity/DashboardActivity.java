@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 /**
  * Dashboard Activity class
@@ -26,9 +29,18 @@ public class DashboardActivity extends BaseActivity {
             Intent connSettingIntent = new Intent(this, ConnectionPreferenceActivity.class);
             startActivity(connSettingIntent);
             finish();
-        } else {
+        } else if (getApp().hasInternetConnection()) {
             getApp().setConnectionPreferences();
         }
+
+        Button test = (Button) findViewById(R.id.test);
+        test.setOnClickListener(new OnClickListener() {
+
+            public void onClick(View arg0) {
+
+                startActivity(new Intent(DashboardActivity.this, TouchRotateActivity.class));
+            }
+        });
     }
 
     @Override

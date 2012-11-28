@@ -8,17 +8,17 @@ package pl.cadavre.wsnv.type;
  */
 public final class TemperatureType extends Type {
 
-    public static String name = "Temperature";
+    public final String name = "Temperature";
 
-    public static String unit = "kelvin";
+    public String unit = "kelvin";
 
-    public static String unitShort = "K";
+    public String unitShort = "K";
 
-    static double factor = 1;
+    double factor = 1;
 
-    static double adding = 0;
+    double adding = 0;
 
-    public static double convert(int reading) {
+    public double convert(int reading) {
 
         double Rthr = 10000.0 * (1023 - reading) / reading;
         double calculation = 0.001010024 + (0.000242127 * Math.log(Rthr))
@@ -28,12 +28,12 @@ public final class TemperatureType extends Type {
         return result * factor - adding;
     }
 
-    public static boolean isMultiunit() {
+    public boolean isMultiunit() {
 
         return true;
     }
 
-    public static void setKelvin() {
+    public void setKelvin() {
 
         unit = "kelvin";
         unitShort = "K";
@@ -41,7 +41,7 @@ public final class TemperatureType extends Type {
         adding = 0;
     }
 
-    public static void setCelsius() {
+    public void setCelsius() {
 
         unit = "degree Celsius";
         unitShort = "\u00B0C";
@@ -49,7 +49,7 @@ public final class TemperatureType extends Type {
         adding = 273.15;
     }
 
-    public static void setFarenthite() {
+    public void setFarenthite() {
 
         unit = "degree Fahrenheit";
         unitShort = "\u00B0F";

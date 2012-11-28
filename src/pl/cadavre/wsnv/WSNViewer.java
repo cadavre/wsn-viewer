@@ -55,6 +55,7 @@ public class WSNViewer extends Application {
      */
     public boolean hasInternetConnection() {
 
+        networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             return true;
         } else {

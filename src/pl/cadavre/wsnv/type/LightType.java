@@ -8,7 +8,7 @@ package pl.cadavre.wsnv.type;
  */
 public final class LightType extends Type {
 
-    public static String name = "Light";
+    public final String name = "Light";
 
     public static final int LEVEL_DARK = 0;
 
@@ -20,7 +20,7 @@ public final class LightType extends Type {
 
     public static final int LEVEL_GLARINGLY = 4;
 
-    public static int getLevel(int reading) {
+    public int getLevel(int reading) {
 
         if (reading < 20) {
             return LEVEL_DARK;

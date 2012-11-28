@@ -6,24 +6,24 @@ package pl.cadavre.wsnv.type;
  * 
  * @author Seweryn Zeman <seweryn.zeman@gmail.com>
  */
-public abstract class Type {
+public class Type {
 
-    static String name = "Raw";
+    public String name = "Raw";
 
-    static String unit = "";
+    public String unit = "";
 
-    static String unitShort = "";
+    public String unitShort = "";
 
-    static double factor = 1;
+    double factor = 1;
 
-    static double adding = 0;
+    double adding = 0;
 
-    public static double convert(int reading) {
+    public double convert(int reading) {
 
         return reading * factor + adding;
     }
 
-    public static boolean isMultiunit() {
+    public boolean isMultiunit() {
 
         return false;
     }

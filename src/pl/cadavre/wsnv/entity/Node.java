@@ -1,8 +1,6 @@
 
 package pl.cadavre.wsnv.entity;
 
-import pl.cadavre.wsnv.type.Type;
-
 /**
  * Node representation base Class
  * 
@@ -12,15 +10,21 @@ public class Node {
 
     private int id;
 
-    private Type type;
+    private String name;
 
-    private String location;
+    private boolean enabled = false;
+
+    private ResultSet results;
 
     private double x = 0;
 
     private double y = 0;
 
     private double z = 0;
+
+    public Node() {
+
+    }
 
     /**
      * @return the id
@@ -86,24 +90,58 @@ public class Node {
         this.z = z;
     }
 
-    public Type getType() {
+    /**
+     * @return String
+     */
+    public String getName() {
 
-        return type;
+        return name;
     }
 
-    public void setType(Type type) {
+    /**
+     * @param String
+     */
+    public void setName(String name) {
 
-        this.type = type;
+        this.name = name;
     }
 
-    public String getLocation() {
+    @Override
+    public String toString() {
 
-        return location;
+        return "Node #" + id + " " + name + " (" + x + ", " + y + ", " + z + ")";
     }
 
-    public void setLocation(String location) {
+    /**
+     * @return the enabled
+     */
+    public boolean isEnabled() {
 
-        this.location = location;
+        return enabled;
+    }
+
+    /**
+     * @param enabled the enabled to set
+     */
+    public void setEnabled(boolean enabled) {
+
+        this.enabled = enabled;
+    }
+
+    /**
+     * @return the results
+     */
+    public ResultSet getResults() {
+
+        return results;
+    }
+
+    /**
+     * @param results the results to set
+     */
+    public void setResults(ResultSet results) {
+
+        this.results = results;
     }
 
 }
