@@ -1,41 +1,53 @@
 <resources>
 
     <!-- Global -->
-    <string name="app_name">WSN Viewer</string>
+    <string name="app_name">IQ home</string>
     <!-- Labels -->
-    <string name="success">Success</string>
-    <string name="error">Error</string>
-    <!-- Short texts -->
-    <string name="test_conn">Test connection</string>
-    <string name="required">Required</string>
+    <string name="success">Sukces</string>
+    <string name="error">Błąd</string>
+    <string name="unknown">Nieznane</string>
+    <!-- Short texts for widgets -->
+    <string name="test_conn">Test połączenia</string>
+    <string name="required">Pole wymagane</string>
+    <string name="last_reading">Ostatni odczyt</string>
+    <string name="mote_name">Etykieta mota</string>
+    <string name="set_location">Ustaw lokalizację</string>
+    <!-- Short texts of informations -->
+    <string name="light_dark">Ciemno</string>
+    <string name="light_dusk">Półmrok</string>
+    <string name="light_bright">Jasno</string>
+    <string name="light_sunny">Słonecznie</string>
+    <string name="light_glaringly">Oślepiająco</string>
+    <string name="move_none">Brak ruchu</string>
+    <string name="move_present">Ruch</string>
     <!-- Activity titles -->
-    <string name="title_conn_pref">Connection preferences</string>
-    <string name="title_node_autoconfig">Nodes auto-configuration</string>
+    <string name="title_conn_pref">Ustawienia połączenia</string>
+    <string name="title_node_autoconfig">Autokonfiguracja motów</string>
     <!-- Error contents -->
-    <string name="error_no_internet_connection">Please connect to the Internet before you start using WSN Viewer.</string>
-    <string name="error_not_necessary_settings">You must set required fields first.</string>
-    <string name="error_loading_jdbc">Cannot load database Java library.</string>
-    <string name="error_no_db_connection">Connection to database failed. Check your settings.</string>
+    <string name="error_no_internet_connection">Proszę połączyć się z Internetem przed rozpoczęciem korzystania z IQ home.</string>
+    <string name="error_not_necessary_settings">Musisz uzupełnić wymagane pola.</string>
+    <string name="error_loading_jdbc">Nie można załadować biblioteki JDBC.</string>
+    <string name="error_no_db_connection">Połączenie nie powiodło się. Sprawdź ustawienia i spróbuj ponownie.</string>
     <!-- Success contents -->
-    <string name="success_done_db_connection">Connection to database succedeed.</string>
+    <string name="success_done_db_connection">Połączenie z bazą zakończyło się pomyślnie.</string>
     <!-- Settings labels -->
-    <string name="db_settings">Database connection</string>
-    <string name="db_local_settings">Local database connection</string>
+    <string name="db_settings">Połączenie z bazą danych</string>
+    <string name="db_local_settings">Lokalne połączenie z bazą</string>
     <!-- DB host -->
-    <string name="db_host_title">Host address</string>
+    <string name="db_host_title">Adres hosta</string>
     <!-- DB localhost -->
-    <string name="db_localhost_title">Localhost address</string>
+    <string name="db_localhost_title">Lokalny adres hosta</string>
     <!-- DB port -->
-    <string name="db_port_title">Port number</string>
+    <string name="db_port_title">Port</string>
     <!-- DB database -->
-    <string name="db_database_title">Database name</string>
+    <string name="db_database_title">Nazwa bazy</string>
     <!-- DB user -->
-    <string name="db_user_title">Username</string>
+    <string name="db_user_title">Nazwa użytkownika</string>
     <!-- DB password -->
-    <string name="db_password_title">Password</string>
+    <string name="db_password_title">Hasło</string>
     <!-- DB name -->
-    <string name="db_name_title">Connection name</string>
+    <string name="db_name_title">Twoja nazwa połączenia</string>
     <!-- Local WiFi SSID -->
-    <string name="local_wifi_ssid_title">Local Wi-Fi SSID</string>
+    <string name="local_wifi_ssid_title">SSID lokalnego Wi-Fi</string>
 
 </resources>

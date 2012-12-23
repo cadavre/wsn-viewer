@@ -6,7 +6,7 @@ package pl.cadavre.wsnv.type;
  * 
  * @author Seweryn Zeman <seweryn.zeman@gmail.com>
  */
-public final class TemperatureType extends Type {
+public final class TemperatureType extends RawType {
 
     public final String name = "Temperature";
 
@@ -52,7 +52,7 @@ public final class TemperatureType extends Type {
     public void setFarenthite() {
 
         unit = "degree Fahrenheit";
-        unitShort = "\u00B0F";
+        unitShort = "\u00B0FF";
         factor = 9.0 / 5.0;
         adding = -459.67;
     }

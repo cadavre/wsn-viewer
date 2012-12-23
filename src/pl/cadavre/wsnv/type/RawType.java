@@ -6,7 +6,7 @@ package pl.cadavre.wsnv.type;
  * 
  * @author Seweryn Zeman <seweryn.zeman@gmail.com>
  */
-public class Type {
+public class RawType {
 
     public String name = "Raw";
 

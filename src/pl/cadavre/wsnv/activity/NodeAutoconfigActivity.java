@@ -2,27 +2,29 @@
 package pl.cadavre.wsnv.activity;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 import pl.cadavre.wsnv.DatabaseConstants;
 import pl.cadavre.wsnv.R;
 import pl.cadavre.wsnv.WSNViewer;
 import pl.cadavre.wsnv.entity.Node;
 import pl.cadavre.wsnv.entity.Result;
-import pl.cadavre.wsnv.entity.TypeMap;
-import pl.cadavre.wsnv.entity.UniqueResultSet;
-import pl.cadavre.wsnv.exception.NonUniqueException;
 import pl.cadavre.wsnv.network.JDBCConnection;
-import pl.cadavre.wsnv.type.Type;
-import pl.cadavre.wsnv.type.TypeFactory;
+import pl.cadavre.wsnv.type.LightType;
+import pl.cadavre.wsnv.type.MoveType;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,9 +35,9 @@ import android.widget.Toast;
  */
 public class NodeAutoconfigActivity extends BaseActivity {
 
-    TypeMap types = new TypeMap();
-
     ArrayList<Node> nodes = new ArrayList<Node>();
+
+    ArrayList<Result> results = new ArrayList<Result>();
 
     int nodeCount = 0;
 
@@ -43,10 +45,10 @@ public class NodeAutoconfigActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_empty);
+        setContentView(R.layout.activity_node_autoconfig);
 
-        Button btn = (Button) findViewById(R.id.test);
-        btn.setOnClickListener(new OnClickListener() {
+        Button btnConfigure = (Button) findViewById(R.id.btnConfigure);
+        btnConfigure.setOnClickListener(new OnClickListener() {
 
             public void onClick(View v) {
 
@@ -56,55 +58,117 @@ public class NodeAutoconfigActivity extends BaseActivity {
         });
     }
 
-    protected void setGuessTypes(ResultSet results) {
+    private void setReadData(ResultSet results) {
 
+        int size = 0;
         try {
-            // 1. get Types from RESULTS_TABLE by columns
-            ResultSetMetaData metaData = results.getMetaData();
-            int count = metaData.getColumnCount();
-            for (int i = 1; i <= count; i++) {
-                String name = metaData.getColumnName(i);
-                Type type = TypeFactory.get(name);
-                if (type != null) {
-                    this.types.put(i, type);
-                }
-            }
-
-            // 2. get Node objects
-            while (results.next()) {
-                int id = results.getInt(DatabaseConstants.Results.ID);
-
-                Node node = new Node();
-                node.setId(id);
-
-                // 3. fill latest Result with data
-                UniqueResultSet resultSet = new UniqueResultSet();
-
-                for (Type type : this.types.getAvailableTypes()) {
-                    Result result = new Result(
-                            results.getDouble(this.types.getColumnForType(type)), type,
-                            results.getDate(DatabaseConstants.Results.TIMESTAMP));
-                    resultSet.addResult(result);
-                }
-
-                node.setResults(resultSet);
-                this.nodes.add(node);
-
-                // 4. increase Node counter
-                nodeCount++;
-            }
+            results.beforeFirst();
+            results.last();
+            size = results.getRow();
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (NonUniqueException e) {
+            Log.e(TAG, "Error: reading size");
             e.printStackTrace();
         }
+        this.nodeCount = size;
+        this.nodes.ensureCapacity(size);
+        this.results.ensureCapacity(size);
+
+        try {
+            results.beforeFirst();
+            while (results.next()) {
+                Node node = new Node();
+                node.setId(results.getInt(DatabaseConstants.Results.ID));
+                this.nodes.add(node);
+
+                Result result = new Result(node, results);
+                this.results.add(result);
+            }
+        } catch (SQLException e) {
+            Log.e(TAG, "Error: reading nodes and results");
+            e.printStackTrace();
+        }
+    }
+
+    private void setNodesList() {
 
         LayoutInflater inflater = getLayoutInflater();
-        View nodeView = inflater.inflate(R.layout.node_autoconfig_entry, null);
 
-        for (Node node : nodes) {
-            TextView tvResultsTime = (TextView) nodeView.findViewById(R.id.tvResultsTime);
-            
+        LinearLayout llNodesList = (LinearLayout) findViewById(R.id.llNodesList);
+
+        for (int i = 0; i < this.nodeCount; i++) {
+            LinearLayout addon = (LinearLayout) inflater.inflate(R.layout.node_autoconfig_entry,
+                    null);
+            Result result = this.results.get(i);
+
+            // write Node ID
+            TextView tvNodeID = (TextView) addon.findViewById(R.id.tvNodeID);
+            tvNodeID.setText("ID: " + this.nodes.get(i).getId());
+
+            // write last reading time
+            TextView tvResultsTime = (TextView) addon.findViewById(R.id.tvResultsTime);
+            int year = result.getTime().get(Calendar.YEAR);
+            String month = result.getTime().getDisplayName(Calendar.MONTH, Calendar.LONG,
+                    Locale.getDefault());
+            int day = result.getTime().get(Calendar.DAY_OF_MONTH);
+            int hour = result.getTime().get(Calendar.HOUR_OF_DAY);
+            int minute = result.getTime().get(Calendar.MINUTE);
+            int second = result.getTime().get(Calendar.SECOND);
+            String stringTime = String.format("%s: %02d %s %02d %02d:%02d:%02d",
+                    getString(R.string.last_reading), day, month, year, hour, minute, second);
+            tvResultsTime.setText(stringTime);
+
+            // write last readings
+            TextView tvRTemp = (TextView) addon.findViewById(R.id.tvRTemp);
+            TextView tvRLight = (TextView) addon.findViewById(R.id.tvRLight);
+            TextView tvRMove = (TextView) addon.findViewById(R.id.tvRMove);
+
+            tvRTemp.setText(this.results.get(i).getConvertedTemperature());
+
+            Drawable lightCompound = null;
+            String lightName = "";
+            switch (this.results.get(i).getLightLevel()) {
+                case LightType.LEVEL_DARK:
+                    lightCompound = getResources().getDrawable(R.drawable.ic_brightness_low);
+                    lightName = getString(R.string.light_dark);
+                    break;
+                case LightType.LEVEL_DUSK:
+                    lightCompound = getResources().getDrawable(R.drawable.ic_brightness_medium);
+                    lightName = getString(R.string.light_dusk);
+                    break;
+                case LightType.LEVEL_BRIGHT:
+                case LightType.LEVEL_SUNNY:
+                    lightCompound = getResources().getDrawable(R.drawable.ic_brightness_high);
+                    lightName = getString(R.string.light_bright);
+                    break;
+            }
+            tvRLight.setText(lightName);
+            tvRLight.setCompoundDrawablesWithIntrinsicBounds(lightCompound, null, null, null);
+
+            String moveName = "";
+            switch (this.results.get(i).getMoveStatus()) {
+                case MoveType.MOVE_NONE:
+                    moveName = getString(R.string.move_none);
+                    break;
+                case MoveType.MOVE_PRESENT:
+                    moveName = getString(R.string.move_present);
+                    break;
+                case MoveType.UNKNOWN:
+                    moveName = getString(R.string.unknown);
+                    break;
+            }
+            tvRMove.setText(moveName);
+
+            // set proper tags
+            addon.findViewById(R.id.etName).setTag("id:" + this.nodes.get(i).getId());
+            addon.findViewById(R.id.btnSetLocation).setTag("id:" + this.nodes.get(i).getId());
+
+            // set divider margin
+            LinearLayout.LayoutParams lp = new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(0, 25, 0, 0);
+            addon.setLayoutParams(lp);
+
+            llNodesList.addView(addon);
         }
     }
 
@@ -145,7 +209,8 @@ public class NodeAutoconfigActivity extends BaseActivity {
                 return;
             }
 
-            setGuessTypes((ResultSet) results);
+            setReadData((ResultSet) results);
+            setNodesList();
         }
     }
 }

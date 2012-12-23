@@ -4,8 +4,8 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="14" />
+        android:minSdkVersion="16"
+        android:targetSdkVersion="16" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -18,7 +18,9 @@
         android:theme="@style/AppTheme" android:debuggable="true">
         <activity
             android:name=".activity.DashboardActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:configChanges="orientation"
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,13 +29,14 @@
         </activity>
         <activity
             android:name=".activity.ConnectionPreferenceActivity"
-            android:label="@string/title_conn_pref" />
+            android:label="@string/title_conn_pref"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.NodeAutoconfigActivity"
-            android:label="@string/title_node_autoconfig" />
-        <activity
-            android:name=".activity.TouchRotateActivity"
-            android:label="Test" />
+            android:label="@string/title_node_autoconfig"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

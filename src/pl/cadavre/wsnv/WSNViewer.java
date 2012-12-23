@@ -71,9 +71,15 @@ public class WSNViewer extends Application {
     public int getNetworkType() {
 
         NetworkInfo currentNetwork = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        boolean isWifiConn = currentNetwork.isConnected();
+        boolean isWifiConn = false;
+        if (currentNetwork != null) {
+            isWifiConn = currentNetwork.isConnected();
+        }
         currentNetwork = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        boolean isMobileConn = currentNetwork.isConnected();
+        boolean isMobileConn = false;
+        if (currentNetwork != null) {
+            isMobileConn = currentNetwork.isConnected();
+        }
 
         return isWifiConn ? NETWORK_WIFI : (isMobileConn ? NETWORK_MOBILE : null);
     }

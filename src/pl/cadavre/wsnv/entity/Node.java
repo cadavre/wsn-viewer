@@ -8,19 +8,17 @@ package pl.cadavre.wsnv.entity;
  */
 public class Node {
 
-    private int id;
+    private int id; // auto
 
-    private String name;
+    private String name; // manual
 
-    private boolean enabled = false;
+    private boolean enabled = true;
 
-    private ResultSet results;
+    private double x = 0; // manual
 
-    private double x = 0;
+    private double y = 0; // manual
 
-    private double y = 0;
-
-    private double z = 0;
+    private double z = 0; // manual
 
     public Node() {
 
@@ -126,22 +124,6 @@ public class Node {
     public void setEnabled(boolean enabled) {
 
         this.enabled = enabled;
-    }
-
-    /**
-     * @return the results
-     */
-    public ResultSet getResults() {
-
-        return results;
-    }
-
-    /**
-     * @param results the results to set
-     */
-    public void setResults(ResultSet results) {
-
-        this.results = results;
     }
 
 }

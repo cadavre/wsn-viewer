@@ -60,7 +60,13 @@ public class ConnectionPreferenceActivity extends BaseActivity {
                 if (getApp().hasNecessaryPreferences()) {
                     new TestConnectionTask().execute(getApp().connParams);
                 } else {
-                    showOKDialog(R.string.error, R.string.error_not_necessary_settings);
+                    showOKDialog(R.string.error, R.string.error_not_necessary_settings, new OnOKClickListener() {
+
+                        public void onOKClicked() {
+
+                            miTest.collapseActionView();
+                        }
+                    });
                 }
                 return true;
             default:

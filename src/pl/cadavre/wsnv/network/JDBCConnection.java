@@ -85,7 +85,8 @@ public class JDBCConnection {
     public ResultSet getResults(String $sql) throws SQLException {
 
         try {
-            Statement st = connection.createStatement();
+            Statement st = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             ResultSet results = st.executeQuery($sql);
 
             return results;

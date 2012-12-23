@@ -6,13 +6,13 @@ package pl.cadavre.wsnv.type;
  * 
  * @author Seweryn Zeman <seweryn.zeman@gmail.com>
  */
-public final class LightType extends Type {
+public final class LightType extends RawType {
 
     public final String name = "Light";
 
     public static final int LEVEL_DARK = 0;
 
-    public static final int LEVEL_DUSK = 0;
+    public static final int LEVEL_DUSK = 1;
 
     public static final int LEVEL_BRIGHT = 2;
 

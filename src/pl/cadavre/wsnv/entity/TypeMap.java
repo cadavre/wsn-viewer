@@ -3,13 +3,18 @@ package pl.cadavre.wsnv.entity;
 
 import java.util.HashMap;
 
-import pl.cadavre.wsnv.type.Type;
+import pl.cadavre.wsnv.type.RawType;
 
-public class TypeMap extends HashMap<Integer, Type> {
+/**
+ * Mapping of database types
+ * 
+ * @author Seweryn Zeman <seweryn.zeman@gmail.com>
+ */
+public class TypeMap extends HashMap<Integer, RawType> {
 
-    public Type[] getAvailableTypes() {
+    public RawType[] getAvailableTypes() {
 
-        Type[] types = new Type[this.size()];
+        RawType[] types = new RawType[this.size()];
         this.values().toArray(types);
 
         return types;
@@ -23,15 +28,15 @@ public class TypeMap extends HashMap<Integer, Type> {
         return indexes;
     }
 
-    public Type getTypeForColumn(int index) {
+    public RawType getTypeForColumn(int index) {
 
         return this.get(index);
     }
 
-    public int getColumnForType(Type type) {
+    public int getColumnForType(RawType type) {
 
         int index = 0;
-        for (Type availableType : getAvailableTypes()) {
+        for (RawType availableType : getAvailableTypes()) {
             if (availableType.getClass().getName() == type.getClass().getName()) {
                 break;
             }

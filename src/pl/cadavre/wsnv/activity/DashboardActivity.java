@@ -38,7 +38,7 @@ public class DashboardActivity extends BaseActivity {
 
             public void onClick(View arg0) {
 
-                startActivity(new Intent(DashboardActivity.this, TouchRotateActivity.class));
+                //startActivity(new Intent(DashboardActivity.this, .class));
             }
         });
     }
