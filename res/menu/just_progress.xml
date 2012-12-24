@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/miProgress"
+        android:icon="@android:color/transparent"
+        android:showAsAction="ifRoom|collapseActionView"
+        android:title=""
+        android:actionViewClass="android.widget.ProgressBar" />
+
+</menu>

@@ -46,7 +46,7 @@ public class DashboardActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        menu.add(0, ACTION_BUTTON_CONN_PREF, 0, R.string.test_conn)
+        menu.add(0, ACTION_BUTTON_CONN_PREF, 0, R.string.settings)
                 .setIcon(R.drawable.ic_monitor)
                 .setShowAsAction(
                         MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);

@@ -1,6 +1,10 @@
 
 package pl.cadavre.wsnv;
 
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
+
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,6 +14,10 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.luckycatlabs.sunrisesunset.SunriseSunsetCalculator;
+import com.luckycatlabs.sunrisesunset.dto.Location;
 
 /**
  * WSN Viewer application Class
@@ -23,9 +31,9 @@ public class WSNViewer extends Application {
     public static final int NETWORK_WIFI = 1;
 
     public static final int NETWORK_MOBILE = 2;
-    
+
     public static final String HEALTH_TABLE = "node_health";
-    
+
     public static final String RESULTS_TABLE = "xbw_da100_results";
 
     public Bundle connParams;
@@ -38,6 +46,8 @@ public class WSNViewer extends Application {
 
     private SharedPreferences preferences;
 
+    public SunriseSunsetCalculator sunCalc;
+
     @Override
     public void onCreate() {
 
@@ -46,6 +56,10 @@ public class WSNViewer extends Application {
         networkInfo = connMgr.getActiveNetworkInfo();
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        Location loc = new Location(50.29465825828608, 18.67120456590783); // Gliwice
+        Calendar cal = Calendar.getInstance(Locale.getDefault());
+        TimeZone tz = cal.getTimeZone();
+        this.sunCalc = new SunriseSunsetCalculator(loc, tz);
     }
 
     /**
@@ -131,7 +145,7 @@ public class WSNViewer extends Application {
 
                 // if SSID fits to local_wifi_ssid and db_localhost is set
                 if (preferences.getString(PreferencesConstants.LOCAL_WIFI_SSID, "").equals(
-                        "\"" + wifiConnection.getSSID() + "\"")
+                        wifiConnection.getSSID())
                         && preferences.contains(PreferencesConstants.DB_LOCALHOST)) {
                     connParams.putString(PreferencesConstants.DB_HOST,
                             preferences.getString(PreferencesConstants.DB_LOCALHOST, null));

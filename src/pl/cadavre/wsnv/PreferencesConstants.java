@@ -7,6 +7,8 @@ package pl.cadavre.wsnv;
  * @author Seweryn Zeman <seweryn.zeman@gmail.com>
  */
 public class PreferencesConstants {
+    
+    public static final String NODES_PREFERENCES_NAME = "nodes";
 
     public static final String DB_HOST = "db_host";
 
