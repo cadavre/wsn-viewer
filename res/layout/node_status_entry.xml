@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:showDividers="middle" >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="15dp"
+        android:src="@drawable/ic_node_wireless" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/tvNodeID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0" />
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="2"
+                android:ems="10"
+                android:hint="@string/no_name"
+                android:textAppearance="?android:attr/textAppearanceLarge" >
+
+                <requestFocus />
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/tvResultsTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="4" />
+
+            <TextView
+                android:id="@+id/tvBattery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llResultsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_temp" />
+
+                <TextView
+                    android:id="@+id/tvRTemp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_light" />
+
+                <TextView
+                    android:id="@+id/tvRLight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_move" />
+
+                <TextView
+                    android:id="@+id/tvRMove"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

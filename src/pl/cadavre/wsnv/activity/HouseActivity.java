@@ -7,9 +7,11 @@ import java.util.List;
 import pl.cadavre.wsnv.PreferencesConstants;
 import pl.cadavre.wsnv.R;
 import pl.cadavre.wsnv.dialog.OKDialogFragment.OnOKClickListener;
+import android.R.color;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
 
 /**
  * House Activity class
@@ -168,6 +171,7 @@ public class HouseActivity extends BaseActivity {
                     int x = preferences.getInt(id + "x", 0);
                     int y = preferences.getInt(id + "y", 0);
                     String schema = preferences.getString(id + "schema", "");
+                    String label = preferences.getString("nodeID:" + id, "");
 
                     if (x != 0
                             && y != 0
@@ -175,8 +179,12 @@ public class HouseActivity extends BaseActivity {
                             && schema.equals(assets.get(position).replace(
                                     ".png", ""))) {
                         // ImageView to draw
-                        ImageView pinView = new ImageView(HouseActivity.this);
-                        pinView.setImageResource(R.drawable.ic_pinpoint);
+                        TextView pinView = new TextView(HouseActivity.this);
+                        pinView.setTextColor(Color.WHITE);
+                        pinView.setShadowLayer(2.0f, 0, 0, Color.BLACK);
+                        pinView.setText("ID: " + id + "\n" + label);
+                        Drawable pin = getResources().getDrawable(R.drawable.ic_pinpoint);
+                        pinView.setCompoundDrawablesWithIntrinsicBounds(null, pin, null, null);
                         RelativeLayout.LayoutParams pinLP = new LayoutParams(
                                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
                         // setting proper margins to position ImageView pin

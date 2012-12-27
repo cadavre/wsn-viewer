@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import pl.cadavre.wsnv.DatabaseConstants;
 import pl.cadavre.wsnv.PreferencesConstants;
@@ -19,7 +21,6 @@ import pl.cadavre.wsnv.network.JDBCConnection;
 import pl.cadavre.wsnv.type.LightType;
 import pl.cadavre.wsnv.type.MoveType;
 import android.app.ActionBar;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -31,11 +32,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ProgressBar;
@@ -46,11 +42,11 @@ import android.widget.TextView;
  * 
  * @author Seweryn Zeman <seweryn.zeman@gmail.com>
  */
-public class NodeAutoconfigActivity extends BaseActivity {
-
-    private static final int PICK_POINT_REQUEST = 1;
+public class NodeStatusActivity extends BaseActivity {
 
     SharedPreferences preferences;
+
+    Timer timer;
 
     ArrayList<Node> nodes = new ArrayList<Node>();
 
@@ -66,7 +62,7 @@ public class NodeAutoconfigActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_node_autoconfig);
+        setContentView(R.layout.activity_node_status);
 
         this.preferences = getSharedPreferences(PreferencesConstants.NODES_PREFERENCES_NAME,
                 MODE_PRIVATE);
@@ -74,15 +70,43 @@ public class NodeAutoconfigActivity extends BaseActivity {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        Button btnConfigure = (Button) findViewById(R.id.btnConfigure);
-        btnConfigure.setOnClickListener(new OnClickListener() {
+        try {
+            JDBCConnection.getJDBC();
+        } catch (ClassNotFoundException e) {
+            showOKDialog(R.string.error, R.string.error_loading_jdbc, new OnOKClickListener() {
 
-            public void onClick(View v) {
+                public void onOKClicked() {
 
-                miProgress.expandActionView();
+                    finish();
+                }
+            });
+        }
+
+        new GetLasetsResultsFromTableTask().execute(getApp().connParams);
+    }
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+        TimerTask refreshTask = new TimerTask() {
+
+            @Override
+            public void run() {
+
                 new GetLasetsResultsFromTableTask().execute(getApp().connParams);
             }
-        });
+        };
+
+        timer = new Timer("resultRefresher", false);
+        timer.schedule(refreshTask, 10000, 10000);
+    }
+
+    @Override
+    protected void onPause() {
+
+        timer.cancel();
+        super.onPause();
     }
 
     @Override
@@ -90,53 +114,19 @@ public class NodeAutoconfigActivity extends BaseActivity {
 
         MenuInflater inflater = getMenuInflater();
 
-        if (findViewById(R.id.btnConfigure).isEnabled()) {
-            // inflate Menu
-            inflater.inflate(R.menu.just_progress, menu);
+        // inflate Menu
+        inflater.inflate(R.menu.just_progress, menu);
 
-            // set ProgressBar gravity to right
-            ProgressBar pb = (ProgressBar) menu.findItem(R.id.miProgress).getActionView();
-            ActionBar.LayoutParams lp = new ActionBar.LayoutParams(Gravity.RIGHT);
-            pb.setLayoutParams(lp);
+        // set ProgressBar gravity to right
+        ProgressBar pb = (ProgressBar) menu.findItem(R.id.miProgress).getActionView();
+        ActionBar.LayoutParams lp = new ActionBar.LayoutParams(Gravity.RIGHT);
+        pb.setLayoutParams(lp);
 
-            // save element for further collapse/expand
-            this.miProgress = menu.findItem(R.id.miProgress);
-            this.miProgress.setEnabled(false);
-        } else {
-            // inflate Menu
-            inflater.inflate(R.menu.just_save, menu);
-
-            menu.findItem(R.id.miSave).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-                public boolean onMenuItemClick(MenuItem item) {
-
-                    saveNodesData();
-                    finish();
-
-                    return true;
-                }
-            });
-        }
+        // save element for further collapse/expand
+        this.miProgress = menu.findItem(R.id.miProgress);
+        this.miProgress.setEnabled(false);
 
         return true;
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == PICK_POINT_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                int id = data.getIntExtra("nodeId", 0);
-                String schema = data.getStringExtra("schema");
-                int x = data.getIntExtra("x", 0);
-                int y = data.getIntExtra("y", 0);
-                Log.d(TAG, "gotX:" + x);
-                Log.d(TAG, "gotY:" + y);
-                Log.d(TAG, "gotID:" + id);
-                Log.d(TAG, "gotSchema:" + schema);
-
-                saveNodeLocation(id, x, y, schema);
-            }
-        }
     }
 
     @Override
@@ -162,13 +152,11 @@ public class NodeAutoconfigActivity extends BaseActivity {
      */
     private void goToDashboard() {
 
-        if (getApp().hasNecessaryPreferences()) {
-            Intent intent = new Intent(this, DashboardActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        } else {
-            showOKDialog(R.string.error, R.string.error_not_necessary_settings);
-        }
+        /*Intent intent = new Intent(this, DashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);*/
+        finish();
+
     }
 
     private void setReadData(ResultSet results) {
@@ -228,8 +216,7 @@ public class NodeAutoconfigActivity extends BaseActivity {
         LinearLayout llNodesList = (LinearLayout) findViewById(R.id.llNodesList);
 
         for (int i = 0; i < this.nodeCount; i++) {
-            LinearLayout addon = (LinearLayout) inflater.inflate(R.layout.node_autoconfig_entry,
-                    null);
+            LinearLayout addon = (LinearLayout) inflater.inflate(R.layout.node_status_entry, null);
             Result result = this.results.get(i);
             Node node = this.nodes.get(i);
 
@@ -241,8 +228,8 @@ public class NodeAutoconfigActivity extends BaseActivity {
             tvNodeID.setText("ID: " + node.getId());
 
             // fill ETs if already set
-            EditText etName = (EditText) addon.findViewById(R.id.etName);
-            etName.setText(this.preferences.getString("nodeID:" + node.getId(), ""));
+            TextView tvName = (TextView) addon.findViewById(R.id.tvName);
+            tvName.setText(this.preferences.getString("nodeID:" + node.getId(), ""));
 
             // write last reading time
             TextView tvResultsTime = (TextView) addon.findViewById(R.id.tvResultsTime);
@@ -261,6 +248,7 @@ public class NodeAutoconfigActivity extends BaseActivity {
             if (result.getTime().before(Calendar.getInstance(Locale.getDefault()))) {
                 tvResultsTime.setTextColor(Color.RED);
             }
+            result.getTime().add(Calendar.HOUR, -6);
 
             // write last readings
             TextView tvRTemp = (TextView) addon.findViewById(R.id.tvRTemp);
@@ -309,22 +297,7 @@ public class NodeAutoconfigActivity extends BaseActivity {
             tvRMove.setText(moveName);
 
             // set proper tags
-            addon.findViewById(R.id.etName).setTag("label,id:" + node.getId());
-            addon.findViewById(R.id.btnSetLocation).setTag("location,id:" + node.getId());
             addon.findViewById(R.id.tvBattery).setTag("battery,id:" + node.getId());
-
-            // set location butons listeners
-            addon.findViewById(R.id.btnSetLocation).setOnClickListener(new OnClickListener() {
-
-                public void onClick(View v) {
-
-                    saveNodesData();
-
-                    Intent intent = new Intent(NodeAutoconfigActivity.this, HouseActivity.class);
-                    intent.putExtra("nodeId", ((String) v.getTag()).replace("location,id:", ""));
-                    startActivityForResult(intent, PICK_POINT_REQUEST);
-                }
-            });
 
             // set divider margin
             LinearLayout.LayoutParams lp = new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -349,40 +322,15 @@ public class NodeAutoconfigActivity extends BaseActivity {
             }
         }
     }
-
-    private void saveNodesData() {
-
-        SharedPreferences.Editor prefEditor = this.preferences.edit();
-
-        for (int i = 0; i < this.nodeCount; i++) {
-            Node node = this.nodes.get(i);
-            EditText et = (EditText) findViewById(android.R.id.content).findViewWithTag(
-                    "label,id:" + node.getId());
-
-            prefEditor.putString("nodeID:" + node.getId(), et.getText().toString());
-        }
-
-        prefEditor.putInt("nodeCount", this.nodeCount);
-        prefEditor.commit();
-
-        return;
-    }
-
-    private void saveNodeLocation(int id, int x, int y, String schema) {
-
-        SharedPreferences.Editor prefEditor = this.preferences.edit();
-        prefEditor.putInt(id + "x", x);
-        prefEditor.putInt(id + "y", y);
-        prefEditor.putString(id + "schema", schema);
-        prefEditor.commit();
-    }
-
-    private void cleanupViews() {
-
-        miProgress.collapseActionView(); // hide progress
-        ((Button) findViewById(R.id.btnConfigure)).setEnabled(false); // disable config button
-
-        invalidateOptionsMenu();
+    
+    private void clearList() {
+        
+        LinearLayout llNodesList = (LinearLayout) findViewById(R.id.llNodesList);
+        llNodesList.removeAllViews();
+        
+        this.nodes.clear();
+        this.results.clear();
+        this.healths.clear();
     }
 
     private class GetLasetsResultsFromTableTask extends AsyncTask<Object, Object, Object> {
@@ -427,12 +375,14 @@ public class NodeAutoconfigActivity extends BaseActivity {
                 return;
             }
 
+            clearList();
+            
             setReadData((ResultSet) results);
             setNodesList();
 
             new GetLasetsHealthFromTableTask().execute(getApp().connParams);
 
-            cleanupViews();
+            miProgress.collapseActionView();
         }
     }
 

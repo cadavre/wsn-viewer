@@ -41,6 +41,15 @@ public class DashboardActivity extends BaseActivity {
                 startActivity(new Intent(DashboardActivity.this, HouseActivity.class));
             }
         });
+        
+        Button test2 = (Button) findViewById(R.id.test2);
+        test2.setOnClickListener(new OnClickListener() {
+
+            public void onClick(View arg0) {
+
+                startActivity(new Intent(DashboardActivity.this, NodeStatusActivity.class));
+            }
+        });
     }
 
     @Override

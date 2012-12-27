@@ -38,7 +38,7 @@ public class JDBCConnection {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            Log.e(TAG, "JDBC error: " + e.getMessage());
+            Log.e(TAG, "(1)JDBC error: " + e.getMessage());
             throw e;
         }
     }
@@ -62,7 +62,7 @@ public class JDBCConnection {
 
             return;
         } catch (SQLException e) {
-            Log.e(TAG, "JDBC error: " + e.getMessage());
+            Log.e(TAG, "(2)JDBC error: " + e.getMessage());
             throw e;
         }
     }
@@ -77,7 +77,7 @@ public class JDBCConnection {
         try {
             connection.close();
         } catch (SQLException e) {
-            Log.e(TAG, "JDBC error: " + e.getMessage());
+            Log.e(TAG, "(3)JDBC error: " + e.getMessage());
             throw e;
         }
     }
@@ -91,7 +91,7 @@ public class JDBCConnection {
 
             return results;
         } catch (SQLException e) {
-            Log.e(TAG, "JDBC error: " + e.getMessage());
+            Log.e(TAG, "(4)JDBC error: " + e.getMessage());
             throw e;
         }
     }
