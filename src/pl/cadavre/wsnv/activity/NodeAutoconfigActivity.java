@@ -10,19 +10,21 @@ import java.util.Locale;
 import pl.cadavre.wsnv.DatabaseConstants;
 import pl.cadavre.wsnv.PreferencesConstants;
 import pl.cadavre.wsnv.R;
-import pl.cadavre.wsnv.WSNViewer;
 import pl.cadavre.wsnv.dialog.OKDialogFragment.OnOKClickListener;
+import pl.cadavre.wsnv.entity.Health;
 import pl.cadavre.wsnv.entity.Node;
 import pl.cadavre.wsnv.entity.Result;
+import pl.cadavre.wsnv.entity.Utils;
 import pl.cadavre.wsnv.network.JDBCConnection;
 import pl.cadavre.wsnv.type.LightType;
 import pl.cadavre.wsnv.type.MoveType;
 import android.app.ActionBar;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -46,11 +48,15 @@ import android.widget.TextView;
  */
 public class NodeAutoconfigActivity extends BaseActivity {
 
+    private static final int PICK_POINT_REQUEST = 1;
+
     SharedPreferences preferences;
 
     ArrayList<Node> nodes = new ArrayList<Node>();
 
     ArrayList<Result> results = new ArrayList<Result>();
+
+    ArrayList<Health> healths = new ArrayList<Health>();
 
     int nodeCount = 0;
 
@@ -65,14 +71,16 @@ public class NodeAutoconfigActivity extends BaseActivity {
         this.preferences = getSharedPreferences(PreferencesConstants.NODES_PREFERENCES_NAME,
                 MODE_PRIVATE);
 
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         Button btnConfigure = (Button) findViewById(R.id.btnConfigure);
         btnConfigure.setOnClickListener(new OnClickListener() {
 
             public void onClick(View v) {
 
                 miProgress.expandActionView();
-                new GetLasetsResultsFromTableTask().execute(getApp().connParams,
-                        WSNViewer.RESULTS_TABLE);
+                new GetLasetsResultsFromTableTask().execute(getApp().connParams);
             }
         });
     }
@@ -113,6 +121,56 @@ public class NodeAutoconfigActivity extends BaseActivity {
         return true;
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == PICK_POINT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                int id = data.getIntExtra("nodeId", 0);
+                String schema = data.getStringExtra("schema"); 
+                int x = data.getIntExtra("x", 0);
+                int y = data.getIntExtra("y", 0);
+                Log.d(TAG, "gotX:" + x);
+                Log.d(TAG, "gotY:" + y);
+                Log.d(TAG, "gotID:" + id);
+                Log.d(TAG, "gotSchema:" + schema);
+
+                saveNodeLocation(id, x, y, schema);
+            }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                goToDashboard();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        goToDashboard();
+    }
+
+    /**
+     * Go to Dashboard Activity clearing top Activites stack
+     */
+    private void goToDashboard() {
+
+        if (getApp().hasNecessaryPreferences()) {
+            Intent intent = new Intent(this, DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        } else {
+            showOKDialog(R.string.error, R.string.error_not_necessary_settings);
+        }
+    }
+
     private void setReadData(ResultSet results) {
 
         int size = 0;
@@ -125,8 +183,9 @@ public class NodeAutoconfigActivity extends BaseActivity {
             e.printStackTrace();
         }
         this.nodeCount = size;
-        this.nodes.ensureCapacity(size);
-        this.results.ensureCapacity(size);
+
+        this.nodes.ensureCapacity(this.nodeCount);
+        this.results.ensureCapacity(this.nodeCount);
 
         try {
             results.beforeFirst();
@@ -137,6 +196,25 @@ public class NodeAutoconfigActivity extends BaseActivity {
 
                 Result result = new Result(node, results);
                 this.results.add(result);
+            }
+        } catch (SQLException e) {
+            Log.e(TAG, "Error: reading nodes and results");
+            e.printStackTrace();
+        }
+    }
+
+    private void setHealthData(ResultSet results) {
+
+        this.healths.ensureCapacity(this.nodeCount);
+
+        try {
+            results.beforeFirst();
+            while (results.next()) {
+                int nodeId = results.getInt(DatabaseConstants.Health.ID);
+                Node node = Utils.getNode(this.nodes, nodeId);
+
+                Health health = new Health(node, results);
+                this.healths.add(health);
             }
         } catch (SQLException e) {
             Log.e(TAG, "Error: reading nodes and results");
@@ -161,6 +239,10 @@ public class NodeAutoconfigActivity extends BaseActivity {
             // write Node ID
             TextView tvNodeID = (TextView) addon.findViewById(R.id.tvNodeID);
             tvNodeID.setText("ID: " + node.getId());
+            
+            // fill ETs if already set
+            EditText etName = (EditText) addon.findViewById(R.id.etName);
+            etName.setText(this.preferences.getString("nodeID:" + node.getId(), ""));
 
             // write last reading time
             TextView tvResultsTime = (TextView) addon.findViewById(R.id.tvResultsTime);
@@ -174,6 +256,11 @@ public class NodeAutoconfigActivity extends BaseActivity {
             String stringTime = String.format("%s: %02d %s %02d %02d:%02d:%02d",
                     getString(R.string.last_reading), day, month, year, hour, minute, second);
             tvResultsTime.setText(stringTime);
+
+            result.getTime().add(Calendar.HOUR, 6);
+            if (result.getTime().before(Calendar.getInstance(Locale.getDefault()))) {
+                tvResultsTime.setTextColor(Color.RED);
+            }
 
             // write last readings
             TextView tvRTemp = (TextView) addon.findViewById(R.id.tvRTemp);
@@ -222,8 +309,22 @@ public class NodeAutoconfigActivity extends BaseActivity {
             tvRMove.setText(moveName);
 
             // set proper tags
-            addon.findViewById(R.id.etName).setTag("et,id:" + node.getId());
-            addon.findViewById(R.id.btnSetLocation).setTag("btn,id:" + node.getId());
+            addon.findViewById(R.id.etName).setTag("label,id:" + node.getId());
+            addon.findViewById(R.id.btnSetLocation).setTag("location,id:" + node.getId());
+            addon.findViewById(R.id.tvBattery).setTag("battery,id:" + node.getId());
+
+            // set location butons listeners
+            addon.findViewById(R.id.btnSetLocation).setOnClickListener(new OnClickListener() {
+
+                public void onClick(View v) {
+
+                    saveNodesData();
+
+                    Intent intent = new Intent(NodeAutoconfigActivity.this, HouseActivity.class);
+                    intent.putExtra("nodeId", ((String) v.getTag()).replace("location,id:", ""));
+                    startActivityForResult(intent, PICK_POINT_REQUEST);
+                }
+            });
 
             // set divider margin
             LinearLayout.LayoutParams lp = new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -235,6 +336,20 @@ public class NodeAutoconfigActivity extends BaseActivity {
         }
     }
 
+    private void updateNodesList() {
+
+        for (int i = 0; i < this.nodeCount; i++) {
+            Health health = this.healths.get(i);
+            Node node = this.nodes.get(i);
+            TextView tvBattery = (TextView) findViewById(android.R.id.content).findViewWithTag(
+                    "battery,id:" + node.getId());
+            tvBattery.setText(getString(R.string.battery) + ": " + health.getConvertedBattery());
+            if (health.getBattery() < 20) {
+                tvBattery.setTextColor(Color.RED);
+            }
+        }
+    }
+
     private void saveNodesData() {
 
         SharedPreferences.Editor prefEditor = this.preferences.edit();
@@ -242,7 +357,7 @@ public class NodeAutoconfigActivity extends BaseActivity {
         for (int i = 0; i < this.nodeCount; i++) {
             Node node = this.nodes.get(i);
             EditText et = (EditText) findViewById(android.R.id.content).findViewWithTag(
-                    "et,id:" + node.getId());
+                    "label,id:" + node.getId());
 
             prefEditor.putString("nodeID:" + node.getId(), et.getText().toString());
         }
@@ -251,6 +366,15 @@ public class NodeAutoconfigActivity extends BaseActivity {
         prefEditor.commit();
 
         return;
+    }
+
+    private void saveNodeLocation(int id, int x, int y, String schema) {
+
+        SharedPreferences.Editor prefEditor = this.preferences.edit();
+        prefEditor.putInt(id + "x", x);
+        prefEditor.putInt(id + "y", y);
+        prefEditor.putString(id + "schema", schema);
+        prefEditor.commit();
     }
 
     private void cleanupViews() {
@@ -270,11 +394,10 @@ public class NodeAutoconfigActivity extends BaseActivity {
                 JDBCConnection conn = JDBCConnection.get();
                 conn.openConnection((Bundle) params[0], true);
 
-                String tableName = (String) params[1];
                 String sql = "SELECT t1.* FROM (SELECT nodeid, max(result_time) as max_time FROM "
-                        + tableName
+                        + DatabaseConstants.RESULTS_TABLE
                         + " GROUP BY nodeid) t2 JOIN "
-                        + tableName
+                        + DatabaseConstants.RESULTS_TABLE
                         + " t1 ON t2.nodeid = t1.nodeid AND t2.max_time = t1.result_time ORDER BY nodeid ASC";
                 ResultSet results = conn.getResults(sql);
 
@@ -306,7 +429,57 @@ public class NodeAutoconfigActivity extends BaseActivity {
 
             setReadData((ResultSet) results);
             setNodesList();
+
+            new GetLasetsHealthFromTableTask().execute(getApp().connParams);
+
             cleanupViews();
+        }
+    }
+
+    private class GetLasetsHealthFromTableTask extends AsyncTask<Object, Object, Object> {
+
+        @Override
+        protected Object doInBackground(Object... params) {
+
+            try {
+                JDBCConnection conn = JDBCConnection.get();
+                conn.openConnection((Bundle) params[0], true);
+
+                String sql = "SELECT t1.* FROM (SELECT nodeid, max(result_time) as max_time FROM "
+                        + DatabaseConstants.HEALTH_TABLE
+                        + " GROUP BY nodeid) t2 JOIN "
+                        + DatabaseConstants.HEALTH_TABLE
+                        + " t1 ON t2.nodeid = t1.nodeid AND t2.max_time = t1.result_time ORDER BY nodeid ASC";
+                ResultSet results = conn.getResults(sql);
+
+                conn.closeConnection();
+
+                return results;
+            } catch (SQLException e) {
+                return false;
+            } catch (ClassNotFoundException e) {
+                return false;
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(Object results) {
+
+            if (results.getClass() == Boolean.class) {
+                showOKDialog(R.string.error, R.string.error_unknown, new OnOKClickListener() {
+
+                    public void onOKClicked() {
+
+                        miProgress.collapseActionView();
+                    }
+                });
+
+                return;
+            }
+
+            setHealthData((ResultSet) results);
+            updateNodesList();
         }
     }
 }

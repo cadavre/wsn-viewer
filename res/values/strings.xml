@@ -13,8 +13,10 @@
     <string name="test_conn">Testuj i zapisz</string>
     <string name="required">Pole wymagane</string>
     <string name="last_reading">Ostatni odczyt</string>
+    <string name="battery">Bateria</string>
     <string name="mote_name">Etykieta mota</string>
     <string name="set_location">Ustaw lokalizację</string>
+    <string name="location_set">Lokalizacja ustawiona</string>
     <!-- Short texts of informations -->
     <string name="light_dark">Ciemno</string>
     <string name="light_dusk">Półmrok</string>
@@ -34,6 +36,7 @@
     <string name="error_unknown">Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.</string>
     <!-- Success contents -->
     <string name="success_done_db_connection">Połączenie z bazą zakończyło się pomyślnie.</string>
+    <string name="success_location_set">Lokalizacja mota została wybrana.</string>
     <!-- Settings labels -->
     <string name="db_settings">Połączenie z bazą danych</string>
     <string name="db_local_settings">Lokalne połączenie z bazą</string>

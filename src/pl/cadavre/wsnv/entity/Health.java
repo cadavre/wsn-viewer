@@ -7,9 +7,6 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 
 import pl.cadavre.wsnv.DatabaseConstants;
-import pl.cadavre.wsnv.type.LightType;
-import pl.cadavre.wsnv.type.MoveType;
-import pl.cadavre.wsnv.type.TemperatureType;
 import android.util.Log;
 
 /**
@@ -17,7 +14,7 @@ import android.util.Log;
  * 
  * @author Seweryn Zeman <seweryn.zeman@gmail.com>
  */
-public class Result {
+public class Health {
 
     private Node node;
 
@@ -25,26 +22,25 @@ public class Result {
 
     private Calendar time;
 
-    private int temperature;
+    private int battery;
 
-    private int light;
+    private int healthPktsCount;
 
-    private int move;
+    private int nodePktsCount;
 
-    public Result(Node node) {
+    public Health(Node node) {
 
         this(node, null);
     }
 
-    public Result(Node node, ResultSet results) {
+    public Health(Node node, ResultSet results) {
 
         this.node = node;
         this.nodeId = node.getId();
         try {
-            setTemperature(results.getInt(DatabaseConstants.Results.TEMPERATURE));
-            setLight(results.getInt(DatabaseConstants.Results.LIGHT));
-            setMove(results.getInt(DatabaseConstants.Results.MOVE));
-            setTime(results.getTimestamp(DatabaseConstants.Results.TIMESTAMP));
+            setBattery(results.getInt(DatabaseConstants.Health.BATTERY));
+            setHealthPktsCount(results.getInt(DatabaseConstants.Health.HEALTH_PACKETS_COUNT));
+            setNodePktsCount(results.getInt(DatabaseConstants.Health.NODE_PACKETS_COUNT));
         } catch (SQLException e) {
             Log.e("WSNV", "Error: setting Result object");
             e.printStackTrace();
@@ -112,78 +108,61 @@ public class Result {
     }
 
     /**
-     * @return the temperature
+     * @return the battery
      */
-    public final double getTemperature() {
+    public int getBattery() {
 
-        return temperature;
+        return battery;
     }
 
     /**
-     * @param temperature the temperature to set
+     * @param battery the battery to set
      */
-    public final void setTemperature(int temperature) {
+    public void setBattery(int battery) {
 
-        this.temperature = temperature;
+        this.battery = battery;
     }
 
     /**
-     * @return the light
+     * @return the healthPktsCount
      */
-    public final int getLight() {
+    public int getHealthPktsCount() {
 
-        return light;
+        return healthPktsCount;
     }
 
     /**
-     * @param light the light to set
+     * @param healthPktsCount the healthPktsCount to set
      */
-    public final void setLight(int light) {
+    public void setHealthPktsCount(int healthPktsCount) {
 
-        this.light = light;
+        this.healthPktsCount = healthPktsCount;
     }
 
     /**
-     * @return the move
+     * @return the nodePktsCount
      */
-    public final int getMove() {
+    public int getNodePktsCount() {
 
-        return move;
+        return nodePktsCount;
     }
 
     /**
-     * @param move the move to set
+     * @param nodePktsCount the nodePktsCount to set
      */
-    public final void setMove(int move) {
+    public void setNodePktsCount(int nodePktsCount) {
 
-        this.move = move;
+        this.nodePktsCount = nodePktsCount;
     }
 
-    public String getConvertedTemperature() {
+    public String getConvertedBattery() {
 
-        TemperatureType type = new TemperatureType();
-        type.setCelsius();
-
-        return String.format("%.2f", type.convert(this.temperature)) + type.unitShort;
+        return String.format("%.2f", (this.battery / 10.0)) + "V";
     }
 
-    public int getLightLevel() {
-
-        LightType type = new LightType();
-
-        return type.getLevel(this.light);
-    }
-
-    public int getMoveStatus() {
-
-        MoveType type = new MoveType();
-
-        return type.getStatus(this.move);
-    }
-    
     @Override
     public String toString() {
 
-        return "Result for node#" + this.nodeId;
+        return "Health for node#" + this.nodeId + " " + getConvertedBattery();
     }
 }
