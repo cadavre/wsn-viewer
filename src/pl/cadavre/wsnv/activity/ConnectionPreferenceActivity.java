@@ -34,18 +34,6 @@ public class ConnectionPreferenceActivity extends BaseActivity {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        try {
-            JDBCConnection.getJDBC();
-        } catch (ClassNotFoundException e) {
-            showOKDialog(R.string.error, R.string.error_loading_jdbc, new OnOKClickListener() {
-
-                public void onOKClicked() {
-
-                    finish();
-                }
-            });
-        }
-
     }
 
     @Override
@@ -60,13 +48,14 @@ public class ConnectionPreferenceActivity extends BaseActivity {
                 if (getApp().hasNecessaryPreferences()) {
                     new TestConnectionTask().execute(getApp().connParams);
                 } else {
-                    showOKDialog(R.string.error, R.string.error_not_necessary_settings, new OnOKClickListener() {
+                    showOKDialog(R.string.error, R.string.error_not_necessary_settings,
+                            new OnOKClickListener() {
 
-                        public void onOKClicked() {
+                                public void onOKClicked() {
 
-                            miTest.collapseActionView();
-                        }
-                    });
+                                    miTest.collapseActionView();
+                                }
+                            });
                 }
                 return true;
             default:

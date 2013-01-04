@@ -5,6 +5,7 @@ import pl.cadavre.wsnv.R;
 import pl.cadavre.wsnv.WSNViewer;
 import pl.cadavre.wsnv.dialog.OKDialogFragment;
 import pl.cadavre.wsnv.dialog.OKDialogFragment.OnOKClickListener;
+import pl.cadavre.wsnv.network.JDBCConnection;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +26,18 @@ public class BaseActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         application = (WSNViewer) getApplicationContext();
+
+        try {
+            JDBCConnection.getJDBC();
+        } catch (ClassNotFoundException e) {
+            showOKDialog(R.string.error, R.string.error_loading_jdbc, new OnOKClickListener() {
+
+                public void onOKClicked() {
+
+                    finish();
+                }
+            });
+        }
 
     }
 

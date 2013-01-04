@@ -16,10 +16,10 @@ import pl.cadavre.wsnv.dialog.OKDialogFragment.OnOKClickListener;
 import pl.cadavre.wsnv.entity.Health;
 import pl.cadavre.wsnv.entity.Node;
 import pl.cadavre.wsnv.entity.Result;
-import pl.cadavre.wsnv.entity.Utils;
 import pl.cadavre.wsnv.network.JDBCConnection;
 import pl.cadavre.wsnv.type.LightType;
 import pl.cadavre.wsnv.type.MoveType;
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -42,6 +42,7 @@ import android.widget.TextView;
  * 
  * @author Seweryn Zeman <seweryn.zeman@gmail.com>
  */
+@SuppressLint("DefaultLocale")
 public class NodeStatusActivity extends BaseActivity {
 
     SharedPreferences preferences;
@@ -69,18 +70,6 @@ public class NodeStatusActivity extends BaseActivity {
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-        try {
-            JDBCConnection.getJDBC();
-        } catch (ClassNotFoundException e) {
-            showOKDialog(R.string.error, R.string.error_loading_jdbc, new OnOKClickListener() {
-
-                public void onOKClicked() {
-
-                    finish();
-                }
-            });
-        }
 
         new GetLasetsResultsFromTableTask().execute(getApp().connParams);
     }
@@ -196,25 +185,6 @@ public class NodeStatusActivity extends BaseActivity {
         }
     }
 
-    private void setHealthData(ResultSet results) {
-
-        this.healths.ensureCapacity(this.nodeCount);
-
-        try {
-            results.beforeFirst();
-            while (results.next()) {
-                int nodeId = results.getInt(DatabaseConstants.Health.ID);
-                Node node = Utils.getNode(this.nodes, nodeId);
-
-                Health health = new Health(node, results);
-                this.healths.add(health);
-            }
-        } catch (SQLException e) {
-            Log.e(TAG, "Error: reading nodes and results");
-            e.printStackTrace();
-        }
-    }
-
     private void setNodesList() {
 
         LayoutInflater inflater = getLayoutInflater();
@@ -310,20 +280,6 @@ public class NodeStatusActivity extends BaseActivity {
         }
     }
 
-    private void updateNodesList() {
-
-        for (int i = 0; i < this.nodeCount; i++) {
-            Health health = this.healths.get(i);
-            Node node = this.nodes.get(i);
-            TextView tvBattery = (TextView) findViewById(android.R.id.content).findViewWithTag(
-                    "battery,id:" + node.getId());
-            tvBattery.setText(getString(R.string.battery) + ": " + health.getConvertedBattery());
-            if (health.getBattery() < 20) {
-                tvBattery.setTextColor(Color.RED);
-            }
-        }
-    }
-
     private void clearList() {
 
         LinearLayout llNodesList = (LinearLayout) findViewById(R.id.llNodesList);
@@ -384,53 +340,6 @@ public class NodeStatusActivity extends BaseActivity {
             // new GetLasetsHealthFromTableTask().execute(getApp().connParams);
 
             miProgress.collapseActionView();
-        }
-    }
-
-    private class GetLasetsHealthFromTableTask extends AsyncTask<Object, Object, Object> {
-
-        @Override
-        protected Object doInBackground(Object... params) {
-
-            try {
-                JDBCConnection conn = JDBCConnection.get();
-                conn.openConnection((Bundle) params[0], true);
-
-                String sql = "SELECT t1.* FROM (SELECT nodeid, max(result_time) as max_time FROM "
-                        + DatabaseConstants.HEALTH_TABLE
-                        + " GROUP BY nodeid) t2 JOIN "
-                        + DatabaseConstants.HEALTH_TABLE
-                        + " t1 ON t2.nodeid = t1.nodeid AND t2.max_time = t1.result_time ORDER BY nodeid ASC";
-                ResultSet results = conn.getResults(sql);
-
-                conn.closeConnection();
-
-                return results;
-            } catch (SQLException e) {
-                return false;
-            } catch (ClassNotFoundException e) {
-                return false;
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(Object results) {
-
-            if (results.getClass() == Boolean.class) {
-                showOKDialog(R.string.error, R.string.error_unknown, new OnOKClickListener() {
-
-                    public void onOKClicked() {
-
-                        miProgress.collapseActionView();
-                    }
-                });
-
-                return;
-            }
-
-            setHealthData((ResultSet) results);
-            updateNodesList();
         }
     }
 }

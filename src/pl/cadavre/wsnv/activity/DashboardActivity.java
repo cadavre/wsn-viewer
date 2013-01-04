@@ -1,21 +1,32 @@
 
 package pl.cadavre.wsnv.activity;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import pl.cadavre.wsnv.R;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 /**
  * Dashboard Activity class
  * 
  * @author Seweryn Zeman <seweryn.zeman@gmail.com>
  */
-public class DashboardActivity extends BaseActivity {
+public class DashboardActivity extends BaseActivity implements OnItemClickListener {
 
     private final static int ACTION_BUTTON_CONN_PREF = 0;
 
@@ -23,7 +34,7 @@ public class DashboardActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_empty);
+        setContentView(R.layout.activity_dashboard);
 
         if (!getApp().hasNecessaryPreferences()) {
             Intent connSettingIntent = new Intent(this, ConnectionPreferenceActivity.class);
@@ -33,30 +44,45 @@ public class DashboardActivity extends BaseActivity {
             getApp().setConnectionPreferences();
         }
 
-        Button test = (Button) findViewById(R.id.test);
-        test.setOnClickListener(new OnClickListener() {
+        ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();
+        Map<String, String> item = new HashMap<String, String>();
+        item.put("title", "Plan budynku");
+        item.put("summary", "Poka¿ plan budynku");
+        data.add(item);
+        item = new HashMap<String, String>();
+        item.put("title", "Status budynku");
+        item.put("summary", "Poka¿ aktualne odczyty z czujników");
+        data.add(item);
+        item = new HashMap<String, String>();
+        item.put("title", "Status sieci WSN");
+        item.put("summary", "Poka¿ status sieci czujników");
+        data.add(item);
+        item = new HashMap<String, String>();
+        item.put("title", "Konfiguracja motów");
+        item.put("summary", "Dokonaj rekonfiguracji motów");
+        data.add(item);
+
+        SimpleAdapter adapter = new SimpleAdapter(this, data, android.R.layout.simple_list_item_2,
+                new String[] { "title", "summary" }, new int[] { android.R.id.text1,
+                        android.R.id.text2 });
+
+        ListView lvMainMenu = (ListView) findViewById(R.id.lvMainMenu);
+
+        LayoutInflater inflater = getLayoutInflater();
+        View header = inflater.inflate(android.R.layout.simple_list_item_1, null);
+        TextView tvHeader = (TextView) header.findViewById(android.R.id.text1);
+        tvHeader.setText("Menu g³ówne");
+        lvMainMenu.addHeaderView(tvHeader);
+
+        lvMainMenu.setAdapter(adapter);
+        lvMainMenu.setOnItemClickListener(this);
+
+        ImageView ivIPKM = (ImageView) findViewById(R.id.ivIPKM);
+        ivIPKM.setOnClickListener(new OnClickListener() {
 
             public void onClick(View arg0) {
 
-                startActivity(new Intent(DashboardActivity.this, HouseActivity.class));
-            }
-        });
-        
-        Button test2 = (Button) findViewById(R.id.test2);
-        test2.setOnClickListener(new OnClickListener() {
-
-            public void onClick(View arg0) {
-
-                startActivity(new Intent(DashboardActivity.this, NodeStatusActivity.class));
-            }
-        });
-        
-        Button test3 = (Button) findViewById(R.id.test3);
-        test3.setOnClickListener(new OnClickListener() {
-
-            public void onClick(View arg0) {
-
-                startActivity(new Intent(DashboardActivity.this, SystemStatusActivity.class));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://ipkm.polsl.pl/")));
             }
         });
     }
@@ -83,6 +109,29 @@ public class DashboardActivity extends BaseActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        @SuppressWarnings("rawtypes")
+        Class destination = null;
+        switch (position) {
+            case 1:
+                destination = HouseActivity.class;
+                break;
+            case 2:
+                destination = NodeStatusActivity.class;
+                break;
+            case 3:
+                destination = SystemStatusActivity.class;
+                break;
+            case 4:
+                destination = NodeAutoconfigActivity.class;
+                break;
+            default:
+                return;
+        }
+        startActivity(new Intent(DashboardActivity.this, destination));
     }
 
 }

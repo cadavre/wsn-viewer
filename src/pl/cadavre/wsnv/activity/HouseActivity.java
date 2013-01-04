@@ -48,7 +48,7 @@ public class HouseActivity extends BaseActivity {
     ViewPager vpSchemaContainer;
 
     OnPageChangeListener pageListener;
-    
+
     AssetsPagerAdapter adapter;
 
     ArrayList<Node> nodes = new ArrayList<Node>();
@@ -71,19 +71,7 @@ public class HouseActivity extends BaseActivity {
         this.vpSchemaContainer.setAdapter(adapter);
         this.pageListener = new OnPageChangeListener();
         this.vpSchemaContainer.setOnPageChangeListener(pageListener);
-        
-        try {
-            JDBCConnection.getJDBC();
-        } catch (ClassNotFoundException e) {
-            showOKDialog(R.string.error, R.string.error_loading_jdbc, new OnOKClickListener() {
 
-                public void onOKClicked() {
-
-                    finish();
-                }
-            });
-        }
-        
         new GetLasetsResultsFromTableTask().execute(getApp().connParams);
     }
 
@@ -279,7 +267,7 @@ public class HouseActivity extends BaseActivity {
                                     break;
                             }
                             pinView.append("\n" + lightName);
-                            
+
                             result.getTime().add(Calendar.HOUR, 6);
                             if (result.getTime().before(Calendar.getInstance(Locale.getDefault()))) {
                                 pinView.setTextColor(Color.DKGRAY);

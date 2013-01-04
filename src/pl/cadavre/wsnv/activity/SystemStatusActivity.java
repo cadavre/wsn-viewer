@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import pl.cadavre.wsnv.DatabaseConstants;
 import pl.cadavre.wsnv.PreferencesConstants;
@@ -23,7 +21,6 @@ import pl.cadavre.wsnv.type.MoveType;
 import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,9 +29,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -68,18 +65,6 @@ public class SystemStatusActivity extends BaseActivity {
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-        try {
-            JDBCConnection.getJDBC();
-        } catch (ClassNotFoundException e) {
-            showOKDialog(R.string.error, R.string.error_loading_jdbc, new OnOKClickListener() {
-
-                public void onOKClicked() {
-
-                    finish();
-                }
-            });
-        }
 
         new GetLasetsResultsFromTableTask().execute(getApp().connParams);
     }

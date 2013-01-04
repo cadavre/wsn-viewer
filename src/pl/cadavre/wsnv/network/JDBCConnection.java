@@ -54,7 +54,7 @@ public class JDBCConnection {
                     + ":" + params.getString(PreferencesConstants.DB_PORT) + "/"
                     + params.getString(PreferencesConstants.DB_DATABASE);
             Log.i(TAG, "Connecting to " + address);
-            DriverManager.setLoginTimeout(5);
+            DriverManager.setLoginTimeout(15);
             connection = DriverManager.getConnection(address,
                     params.getString(PreferencesConstants.DB_USER),
                     params.getString(PreferencesConstants.DB_PASSWORD));

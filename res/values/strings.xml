@@ -6,6 +6,13 @@
     <string name="success">Sukces</string>
     <string name="error">Błąd</string>
     <string name="unknown">Nieznane</string>
+    <!-- Menu -->
+    <string name="project_title">Aplikacja do nadzoru inteligentnego budynku z zastosowaniem systemu operacyjnego Android i bezprzewodowej sieci czujników</string>
+    <string name="author">Seweryn ZEMAN</string>
+    <string name="faculty">Automatyka i Robotyka</string>
+    <string name="specialty">ZAB2</string>
+    <string name="promotor">prof. dr hab. Wojciech MOCZULSKI</string>
+    <string name="keeper">dr inż. Piotr PRZYSTAŁKA</string>
     <!-- Short texts for widgets -->
     <string name="settings">Ustawienia</string>
     <string name="wizard">Kreator ustawień</string>
