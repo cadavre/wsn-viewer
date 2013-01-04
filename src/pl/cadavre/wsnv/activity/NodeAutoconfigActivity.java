@@ -261,6 +261,7 @@ public class NodeAutoconfigActivity extends BaseActivity {
             if (result.getTime().before(Calendar.getInstance(Locale.getDefault()))) {
                 tvResultsTime.setTextColor(Color.RED);
             }
+            result.getTime().add(Calendar.HOUR, -6);
 
             // write last readings
             TextView tvRTemp = (TextView) addon.findViewById(R.id.tvRTemp);

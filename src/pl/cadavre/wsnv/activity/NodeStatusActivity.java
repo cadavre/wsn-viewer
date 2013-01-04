@@ -94,11 +94,18 @@ public class NodeStatusActivity extends BaseActivity {
             @Override
             public void run() {
 
+                runOnUiThread(new Runnable() {
+
+                    public void run() {
+
+                        miProgress.expandActionView();
+                    }
+                });
                 new GetLasetsResultsFromTableTask().execute(getApp().connParams);
             }
         };
 
-        timer = new Timer("resultRefresher", false);
+        timer = new Timer("resultRefresher", true);
         timer.schedule(refreshTask, 10000, 10000);
     }
 
@@ -125,6 +132,7 @@ public class NodeStatusActivity extends BaseActivity {
         // save element for further collapse/expand
         this.miProgress = menu.findItem(R.id.miProgress);
         this.miProgress.setEnabled(false);
+        this.miProgress.expandActionView();
 
         return true;
     }
@@ -152,9 +160,6 @@ public class NodeStatusActivity extends BaseActivity {
      */
     private void goToDashboard() {
 
-        /*Intent intent = new Intent(this, DashboardActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);*/
         finish();
 
     }
@@ -223,11 +228,7 @@ public class NodeStatusActivity extends BaseActivity {
             Calendar sunrise = getApp().sunCalc.getOfficialSunriseCalendarForDate(result.getTime());
             Calendar sunset = getApp().sunCalc.getOfficialSunsetCalendarForDate(result.getTime());
 
-            // write Node ID
-            TextView tvNodeID = (TextView) addon.findViewById(R.id.tvNodeID);
-            tvNodeID.setText("ID: " + node.getId());
-
-            // fill ETs if already set
+            // fill node name
             TextView tvName = (TextView) addon.findViewById(R.id.tvName);
             tvName.setText(this.preferences.getString("nodeID:" + node.getId(), ""));
 
@@ -322,12 +323,12 @@ public class NodeStatusActivity extends BaseActivity {
             }
         }
     }
-    
+
     private void clearList() {
-        
+
         LinearLayout llNodesList = (LinearLayout) findViewById(R.id.llNodesList);
         llNodesList.removeAllViews();
-        
+
         this.nodes.clear();
         this.results.clear();
         this.healths.clear();
@@ -376,11 +377,11 @@ public class NodeStatusActivity extends BaseActivity {
             }
 
             clearList();
-            
+
             setReadData((ResultSet) results);
             setNodesList();
 
-            new GetLasetsHealthFromTableTask().execute(getApp().connParams);
+            // new GetLasetsHealthFromTableTask().execute(getApp().connParams);
 
             miProgress.collapseActionView();
         }

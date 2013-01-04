@@ -18,4 +18,12 @@
         android:layout_centerHorizontal="true"
         android:text="Refreshing status" />
 
+    <Button
+        android:id="@+id/test3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/test2"
+        android:layout_centerHorizontal="true"
+        android:text="Sys dump" />
+
 </RelativeLayout>

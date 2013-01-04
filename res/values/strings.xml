@@ -8,8 +8,13 @@
     <string name="unknown">Nieznane</string>
     <!-- Short texts for widgets -->
     <string name="settings">Ustawienia</string>
+    <string name="wizard">Kreator ustawień</string>
+    <string name="parent">Pośrednik</string>
+    <string name="none">brak</string>
+    <string name="yes">tak</string>
     <string name="start_autoconf">Rozpocznij konfigurację</string>
     <string name="save">Zapisz</string>
+    <string name="last_time">Ostatnio</string>
     <string name="test_conn">Testuj i zapisz</string>
     <string name="required">Pole wymagane</string>
     <string name="last_reading">Ostatni odczyt</string>
@@ -18,18 +23,21 @@
     <string name="no_name">Brak etykiety</string>
     <string name="set_location">Ustaw lokalizację</string>
     <string name="location_set">Lokalizacja ustawiona</string>
+    <string name="node_packets">Wysłane pakiety danych</string>
+    <string name="health_packets">Wysłane pakiety statusu</string>
     <!-- Short texts of informations -->
     <string name="light_dark">Ciemno</string>
     <string name="light_dusk">Półmrok</string>
     <string name="light_bright">Jasno</string>
-    <string name="light_sunny">Słonecznie</string>
+    <string name="light_sunny">Słońce</string>
     <string name="light_glaringly">Oślepiająco</string>
     <string name="move_none">Brak ruchu</string>
     <string name="move_present">Ruch</string>
     <!-- Activity titles -->
     <string name="title_conn_pref">Ustawienia połączenia</string>
     <string name="title_node_autoconfig">Autokonfiguracja motów</string>
-    <string name="title_node_status">Aktualny status motów</string>
+    <string name="title_node_status">Aktualny status budynku</string>
+    <string name="title_system_status">Status sieci czujników</string>
     <!-- Error contents -->
     <string name="error_no_internet_connection">Proszę połączyć się z Internetem przed rozpoczęciem korzystania z IQ home.</string>
     <string name="error_not_necessary_settings">Musisz uzupełnić wymagane pola.</string>

@@ -2,6 +2,7 @@
 
     <PreferenceCategory android:title="@string/db_settings" >
         <EditTextPreference
+            android:defaultValue="0.0.0.0"
             android:dialogTitle="@string/db_host_title"
             android:key="db_host"
             android:summary="@string/required"
@@ -13,16 +14,19 @@
             android:summary="@string/required"
             android:title="@string/db_port_title" />
         <EditTextPreference
+            android:defaultValue="task"
             android:dialogTitle="@string/db_database_title"
             android:key="db_database"
             android:summary="@string/required"
             android:title="@string/db_database_title" />
         <EditTextPreference
+            android:defaultValue="tele"
             android:dialogTitle="@string/db_user_title"
             android:key="db_user"
             android:summary="@string/required"
             android:title="@string/db_user_title" />
         <EditTextPreference
+            android:defaultValue="tiny"
             android:dialogTitle="@string/db_password_title"
             android:key="db_password"
             android:summary="@string/required"

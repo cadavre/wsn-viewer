@@ -20,6 +20,8 @@ public class Health {
 
     private int nodeId = -1;
 
+    private int parentId = -1;
+
     private Calendar time;
 
     private int battery;
@@ -41,6 +43,7 @@ public class Health {
             setBattery(results.getInt(DatabaseConstants.Health.BATTERY));
             setHealthPktsCount(results.getInt(DatabaseConstants.Health.HEALTH_PACKETS_COUNT));
             setNodePktsCount(results.getInt(DatabaseConstants.Health.NODE_PACKETS_COUNT));
+            setParentId(results.getInt(DatabaseConstants.Health.PARENT_ID));
         } catch (SQLException e) {
             Log.e("WSNV", "Error: setting Result object");
             e.printStackTrace();
@@ -79,6 +82,22 @@ public class Health {
     public final void setNodeId(int nodeId) {
 
         this.nodeId = nodeId;
+    }
+
+    /**
+     * @return the parentId
+     */
+    public int getParentId() {
+
+        return parentId;
+    }
+
+    /**
+     * @param parentId the parentId to set
+     */
+    public void setParentId(int parentId) {
+
+        this.parentId = parentId;
     }
 
     /**

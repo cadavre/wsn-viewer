@@ -44,6 +44,11 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.SystemStatusActivity"
+            android:label="@string/title_system_status"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.HouseActivity"
             android:label="lejbel"
             android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen"

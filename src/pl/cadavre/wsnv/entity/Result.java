@@ -114,7 +114,7 @@ public class Result {
     /**
      * @return the temperature
      */
-    public final double getTemperature() {
+    public final int getTemperature() {
 
         return temperature;
     }

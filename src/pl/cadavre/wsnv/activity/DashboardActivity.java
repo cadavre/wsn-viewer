@@ -50,12 +50,21 @@ public class DashboardActivity extends BaseActivity {
                 startActivity(new Intent(DashboardActivity.this, NodeStatusActivity.class));
             }
         });
+        
+        Button test3 = (Button) findViewById(R.id.test3);
+        test3.setOnClickListener(new OnClickListener() {
+
+            public void onClick(View arg0) {
+
+                startActivity(new Intent(DashboardActivity.this, SystemStatusActivity.class));
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        menu.add(0, ACTION_BUTTON_CONN_PREF, 0, R.string.settings)
+        menu.add(0, ACTION_BUTTON_CONN_PREF, 0, R.string.wizard)
                 .setIcon(R.drawable.ic_monitor)
                 .setShowAsAction(
                         MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
