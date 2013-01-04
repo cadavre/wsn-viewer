@@ -4,7 +4,7 @@
 
     <fragment
         android:id="@+id/fragConnPref"
-        android:name="pl.cadavre.wsnv.fragment.ConnectionPreferenceFragment"
+        android:name="pl.zeman.iqh.fragment.ConnectionPreferenceFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
