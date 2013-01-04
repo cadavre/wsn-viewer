@@ -38,7 +38,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
- * Connects to database, obtains node data and makes autoconfig
+ * Connects to database, obtains node and health data with autorefresh
  * 
  * @author Seweryn Zeman <seweryn.zeman@gmail.com>
  */
@@ -153,6 +153,11 @@ public class NodeStatusActivity extends BaseActivity {
 
     }
 
+    /**
+     * Set Nodes and Results
+     * 
+     * @param results
+     */
     private void setReadData(ResultSet results) {
 
         int size = 0;
@@ -185,6 +190,9 @@ public class NodeStatusActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Fill Nodes list on screen
+     */
     private void setNodesList() {
 
         LayoutInflater inflater = getLayoutInflater();
@@ -280,6 +288,9 @@ public class NodeStatusActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Clear Nodes list on screen to preserve space for new Results
+     */
     private void clearList() {
 
         LinearLayout llNodesList = (LinearLayout) findViewById(R.id.llNodesList);
@@ -290,6 +301,11 @@ public class NodeStatusActivity extends BaseActivity {
         this.healths.clear();
     }
 
+    /**
+     * Asynchronical task for loading Results from database
+     * 
+     * @author Seweryn Zeman <seweryn.zeman@gmail.com>
+     */
     private class GetLasetsResultsFromTableTask extends AsyncTask<Object, Object, Object> {
 
         @Override
@@ -336,8 +352,6 @@ public class NodeStatusActivity extends BaseActivity {
 
             setReadData((ResultSet) results);
             setNodesList();
-
-            // new GetLasetsHealthFromTableTask().execute(getApp().connParams);
 
             miProgress.collapseActionView();
         }

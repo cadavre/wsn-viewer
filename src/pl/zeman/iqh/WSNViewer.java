@@ -19,7 +19,7 @@ import com.luckycatlabs.sunrisesunset.SunriseSunsetCalculator;
 import com.luckycatlabs.sunrisesunset.dto.Location;
 
 /**
- * WSN Viewer application Class
+ * Application Class
  * 
  * @author Seweryn Zeman <seweryn.zeman@gmail.com>
  */

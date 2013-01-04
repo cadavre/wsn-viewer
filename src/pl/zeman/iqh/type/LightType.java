@@ -20,6 +20,12 @@ public final class LightType extends RawType {
 
     public static final int LEVEL_GLARINGLY = 4;
 
+    /**
+     * Get light level from reading
+     * 
+     * @param reading
+     * @return Integer
+     */
     public int getLevel(int reading) {
 
         if (reading < 20) {

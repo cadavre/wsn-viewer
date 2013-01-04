@@ -18,6 +18,9 @@ public final class TemperatureType extends RawType {
 
     double adding = 0;
 
+    /**
+     * Convert reading to readable format
+     */
     public double convert(int reading) {
 
         double Rthr = 10000.0 * (1023 - reading) / reading;
@@ -28,11 +31,17 @@ public final class TemperatureType extends RawType {
         return result * factor - adding;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isMultiunit() {
 
         return true;
     }
 
+    /**
+     * Set Kelvin format
+     */
     public void setKelvin() {
 
         unit = "kelvin";
@@ -41,6 +50,9 @@ public final class TemperatureType extends RawType {
         adding = 0;
     }
 
+    /**
+     * Set Celsius format
+     */
     public void setCelsius() {
 
         unit = "degree Celsius";
@@ -49,6 +61,9 @@ public final class TemperatureType extends RawType {
         adding = 273.15;
     }
 
+    /**
+     * Set Farenthite format
+     */
     public void setFarenthite() {
 
         unit = "degree Fahrenheit";

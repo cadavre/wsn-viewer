@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 /**
- * Network Utilities
+ * Network connection utilities for JDBC driver
  * 
  * @author Seweryn Zeman <seweryn.zeman@gmail.com>
  */
@@ -24,6 +24,12 @@ public class JDBCConnection {
 
     private Connection connection;
 
+    /**
+     * Get JDBC connection to send queries
+     * 
+     * @return
+     * @throws ClassNotFoundException
+     */
     public static JDBCConnection get() throws ClassNotFoundException {
 
         if (instance == null) {
@@ -33,6 +39,11 @@ public class JDBCConnection {
         return instance;
     }
 
+    /**
+     * Load JDBC driver with class reflection mechanism
+     * 
+     * @throws ClassNotFoundException
+     */
     public static void getJDBC() throws ClassNotFoundException {
 
         try {
@@ -43,6 +54,13 @@ public class JDBCConnection {
         }
     }
 
+    /**
+     * Open JDBD connection
+     * 
+     * @param params
+     * @param force
+     * @throws SQLException
+     */
     public void openConnection(Bundle params, boolean force) throws SQLException {
 
         if (connection != null && !force) {
@@ -67,11 +85,22 @@ public class JDBCConnection {
         }
     }
 
+    /**
+     * Open unforced JDBC connection
+     * 
+     * @param params
+     * @throws SQLException
+     */
     public void openConnection(Bundle params) throws SQLException {
 
         openConnection(params, false);
     }
 
+    /**
+     * Close exsisting JDBC connection
+     * 
+     * @throws SQLException
+     */
     public void closeConnection() throws SQLException {
 
         try {
@@ -82,6 +111,13 @@ public class JDBCConnection {
         }
     }
 
+    /**
+     * Get ResultSet from SQL query
+     * 
+     * @param $sql
+     * @return
+     * @throws SQLException
+     */
     public ResultSet getResults(String $sql) throws SQLException {
 
         try {

@@ -16,11 +16,17 @@ public final class MoveType extends RawType {
 
     public static final int MOVE_PRESENT = 2;
 
+    /**
+     * Get move status
+     * 
+     * @param reading
+     * @return Integer
+     */
     public int getStatus(int reading) {
 
-        if (reading < 10) { // TODO check adc readings
+        if (reading < 10) {
             return MOVE_NONE;
-        } else if (reading > 700) { // TODO check adc readings
+        } else if (reading > 700) {
             return MOVE_PRESENT;
         } else {
             return UNKNOWN;

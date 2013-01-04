@@ -75,6 +75,11 @@ public class HouseActivity extends BaseActivity {
         new GetLasetsResultsFromTableTask().execute(getApp().connParams);
     }
 
+    /**
+     * Set Nodes and Results
+     * 
+     * @param results
+     */
     private void setReadData(ResultSet results) {
 
         int size = 0;
@@ -107,6 +112,11 @@ public class HouseActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Adapter for schemas in ViewPager
+     * 
+     * @author Seweryn Zeman <seweryn.zeman@gmail.com>
+     */
     private class AssetsPagerAdapter extends PagerAdapter {
 
         private List<String> assets;
@@ -325,6 +335,11 @@ public class HouseActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Listener for changing schemas
+     * 
+     * @author Seweryn Zeman <seweryn.zeman@gmail.com>
+     */
     public class OnPageChangeListener extends ViewPager.SimpleOnPageChangeListener {
 
         private int currentPage;
@@ -341,6 +356,11 @@ public class HouseActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Asynchronical task for loading Results from database
+     * 
+     * @author Seweryn Zeman <seweryn.zeman@gmail.com>
+     */
     private class GetLasetsResultsFromTableTask extends AsyncTask<Object, Object, Object> {
 
         @Override

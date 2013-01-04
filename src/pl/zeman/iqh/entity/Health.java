@@ -10,7 +10,7 @@ import pl.zeman.iqh.DatabaseConstants;
 import android.util.Log;
 
 /**
- * Result representation base Class, one row is one Result
+ * Health result representation base Class
  * 
  * @author Seweryn Zeman <seweryn.zeman@gmail.com>
  */
@@ -35,6 +35,12 @@ public class Health {
         this(node, null);
     }
 
+    /**
+     * Default constructor
+     * 
+     * @param node
+     * @param results
+     */
     public Health(Node node, ResultSet results) {
 
         this.node = node;
@@ -53,6 +59,8 @@ public class Health {
     }
 
     /**
+     * Get Node
+     * 
      * @return the node
      */
     public final Node getNode() {
@@ -61,6 +69,8 @@ public class Health {
     }
 
     /**
+     * Set Node
+     * 
      * @param node the node to set
      */
     public final void setNode(Node node) {
@@ -69,6 +79,8 @@ public class Health {
     }
 
     /**
+     * Get node ID
+     * 
      * @return the nodeId
      */
     public final int getNodeId() {
@@ -77,6 +89,8 @@ public class Health {
     }
 
     /**
+     * Set node ID
+     * 
      * @param nodeId the nodeId to set
      */
     public final void setNodeId(int nodeId) {
@@ -85,6 +99,8 @@ public class Health {
     }
 
     /**
+     * Get parent ID
+     * 
      * @return the parentId
      */
     public int getParentId() {
@@ -93,6 +109,8 @@ public class Health {
     }
 
     /**
+     * Set parent ID
+     * 
      * @param parentId the parentId to set
      */
     public void setParentId(int parentId) {
@@ -101,6 +119,8 @@ public class Health {
     }
 
     /**
+     * Get Timestamp as Calendar object
+     * 
      * @return the time
      */
     public final Calendar getTime() {
@@ -109,6 +129,8 @@ public class Health {
     }
 
     /**
+     * Set Timestamp by Calendar object
+     * 
      * @param time the time to set
      */
     public final void setTime(Calendar time) {
@@ -117,6 +139,8 @@ public class Health {
     }
 
     /**
+     * Set Timestamp by Timestamp object
+     * 
      * @param time the time to set
      */
     public final void setTime(Timestamp time) {
@@ -127,6 +151,8 @@ public class Health {
     }
 
     /**
+     * Get battery value
+     * 
      * @return the battery
      */
     public int getBattery() {
@@ -135,6 +161,8 @@ public class Health {
     }
 
     /**
+     * Set battery value
+     * 
      * @param battery the battery to set
      */
     public void setBattery(int battery) {
@@ -143,6 +171,8 @@ public class Health {
     }
 
     /**
+     * Get health packets count
+     * 
      * @return the healthPktsCount
      */
     public int getHealthPktsCount() {
@@ -151,6 +181,8 @@ public class Health {
     }
 
     /**
+     * Set health packets count
+     * 
      * @param healthPktsCount the healthPktsCount to set
      */
     public void setHealthPktsCount(int healthPktsCount) {
@@ -159,6 +191,8 @@ public class Health {
     }
 
     /**
+     * Get nodes packets count
+     * 
      * @return the nodePktsCount
      */
     public int getNodePktsCount() {
@@ -167,6 +201,8 @@ public class Health {
     }
 
     /**
+     * Set nodes packets count
+     * 
      * @param nodePktsCount the nodePktsCount to set
      */
     public void setNodePktsCount(int nodePktsCount) {
@@ -174,6 +210,11 @@ public class Health {
         this.nodePktsCount = nodePktsCount;
     }
 
+    /**
+     * Get readable battery value (V)
+     * 
+     * @return String
+     */
     public String getConvertedBattery() {
 
         return String.format("%.2f", (this.battery / 10.0)) + "V";

@@ -36,7 +36,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
- * Connects to database, obtains node data and makes autoconfig
+ * Connects to database, obtains node and health data for WSN status
  * 
  * @author Seweryn Zeman <seweryn.zeman@gmail.com>
  */
@@ -120,6 +120,11 @@ public class SystemStatusActivity extends BaseActivity {
 
     }
 
+    /**
+     * Set Nodes and Results
+     * 
+     * @param results
+     */
     private void setReadData(ResultSet results) {
 
         int size = 0;
@@ -152,6 +157,11 @@ public class SystemStatusActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Set Health data
+     * 
+     * @param results
+     */
     private void setHealthData(ResultSet results) {
 
         this.healths.ensureCapacity(this.nodeCount);
@@ -171,6 +181,9 @@ public class SystemStatusActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Fill Nodes list on screen
+     */
     private void setNodesList() {
 
         LayoutInflater inflater = getLayoutInflater();
@@ -274,6 +287,9 @@ public class SystemStatusActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Update Nodes list with Health data
+     */
     private void updateNodesList() {
 
         for (int i = 0; i < this.nodeCount; i++) {
@@ -313,6 +329,11 @@ public class SystemStatusActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Asynchronical task for loading Results from database
+     * 
+     * @author Seweryn Zeman <seweryn.zeman@gmail.com>
+     */
     private class GetLasetsResultsFromTableTask extends AsyncTask<Object, Object, Object> {
 
         @Override
@@ -362,6 +383,11 @@ public class SystemStatusActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Asynchronical task for loading Health from database
+     * 
+     * @author Seweryn Zeman <seweryn.zeman@gmail.com>
+     */
     private class GetLasetsHealthFromTableTask extends AsyncTask<Object, Object, Object> {
 
         @Override

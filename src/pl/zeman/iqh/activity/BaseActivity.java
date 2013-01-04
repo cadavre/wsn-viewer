@@ -58,6 +58,11 @@ public class BaseActivity extends Activity {
         }
     }
 
+    /**
+     * Get application Context
+     * 
+     * @return WSNViewer
+     */
     public WSNViewer getApp() {
 
         return application;

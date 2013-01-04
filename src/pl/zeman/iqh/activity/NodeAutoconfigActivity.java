@@ -171,6 +171,11 @@ public class NodeAutoconfigActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Set Nodes and Results
+     * 
+     * @param results
+     */
     private void setReadData(ResultSet results) {
 
         int size = 0;
@@ -203,6 +208,11 @@ public class NodeAutoconfigActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Set Health data
+     * 
+     * @param results
+     */
     private void setHealthData(ResultSet results) {
 
         this.healths.ensureCapacity(this.nodeCount);
@@ -222,6 +232,9 @@ public class NodeAutoconfigActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Fill Nodes list on screen
+     */
     private void setNodesList() {
 
         LayoutInflater inflater = getLayoutInflater();
@@ -337,6 +350,9 @@ public class NodeAutoconfigActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Update Nodes list with Health data
+     */
     private void updateNodesList() {
 
         for (int i = 0; i < this.nodeCount; i++) {
@@ -351,6 +367,9 @@ public class NodeAutoconfigActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Save Nodes data to SharedPreferences
+     */
     private void saveNodesData() {
 
         SharedPreferences.Editor prefEditor = this.preferences.edit();
@@ -369,6 +388,14 @@ public class NodeAutoconfigActivity extends BaseActivity {
         return;
     }
 
+    /**
+     * Save single Node location to SharedPreferences
+     * 
+     * @param id Node ID
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @param schema Z coordinate
+     */
     private void saveNodeLocation(int id, int x, int y, String schema) {
 
         SharedPreferences.Editor prefEditor = this.preferences.edit();
@@ -378,6 +405,9 @@ public class NodeAutoconfigActivity extends BaseActivity {
         prefEditor.commit();
     }
 
+    /**
+     * Cleanup Views after proper autoconfig
+     */
     private void cleanupViews() {
 
         miProgress.collapseActionView(); // hide progress
@@ -386,6 +416,11 @@ public class NodeAutoconfigActivity extends BaseActivity {
         invalidateOptionsMenu();
     }
 
+    /**
+     * Asynchronical task for loading Results from database
+     * 
+     * @author Seweryn Zeman <seweryn.zeman@gmail.com>
+     */
     private class GetLasetsResultsFromTableTask extends AsyncTask<Object, Object, Object> {
 
         @Override
@@ -437,6 +472,11 @@ public class NodeAutoconfigActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Asynchronical task for loading Results from database
+     * 
+     * @author Seweryn Zeman <seweryn.zeman@gmail.com>
+     */
     private class GetLasetsHealthFromTableTask extends AsyncTask<Object, Object, Object> {
 
         @Override

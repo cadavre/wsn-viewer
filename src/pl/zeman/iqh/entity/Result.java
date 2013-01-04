@@ -13,7 +13,7 @@ import pl.zeman.iqh.type.TemperatureType;
 import android.util.Log;
 
 /**
- * Result representation base Class, one row is one Result
+ * Result representation base Class
  * 
  * @author Seweryn Zeman <seweryn.zeman@gmail.com>
  */
@@ -36,6 +36,12 @@ public class Result {
         this(node, null);
     }
 
+    /**
+     * Default constructor
+     * 
+     * @param node
+     * @param results
+     */
     public Result(Node node, ResultSet results) {
 
         this.node = node;
@@ -54,6 +60,8 @@ public class Result {
     }
 
     /**
+     * Get Node
+     * 
      * @return the node
      */
     public final Node getNode() {
@@ -62,6 +70,8 @@ public class Result {
     }
 
     /**
+     * Set Node
+     * 
      * @param node the node to set
      */
     public final void setNode(Node node) {
@@ -70,6 +80,8 @@ public class Result {
     }
 
     /**
+     * Get node ID
+     * 
      * @return the nodeId
      */
     public final int getNodeId() {
@@ -78,6 +90,8 @@ public class Result {
     }
 
     /**
+     * Set node ID
+     * 
      * @param nodeId the nodeId to set
      */
     public final void setNodeId(int nodeId) {
@@ -86,6 +100,8 @@ public class Result {
     }
 
     /**
+     * Get Timestamp as Calendar object
+     * 
      * @return the time
      */
     public final Calendar getTime() {
@@ -94,6 +110,8 @@ public class Result {
     }
 
     /**
+     * Set Timestamp as Calendar object
+     * 
      * @param time the time to set
      */
     public final void setTime(Calendar time) {
@@ -102,6 +120,8 @@ public class Result {
     }
 
     /**
+     * Set Timestamp as Timestamp object
+     * 
      * @param time the time to set
      */
     public final void setTime(Timestamp time) {
@@ -112,6 +132,8 @@ public class Result {
     }
 
     /**
+     * Get temperature
+     * 
      * @return the temperature
      */
     public final int getTemperature() {
@@ -120,6 +142,8 @@ public class Result {
     }
 
     /**
+     * Set temperature
+     * 
      * @param temperature the temperature to set
      */
     public final void setTemperature(int temperature) {
@@ -128,6 +152,8 @@ public class Result {
     }
 
     /**
+     * Get light
+     * 
      * @return the light
      */
     public final int getLight() {
@@ -136,6 +162,8 @@ public class Result {
     }
 
     /**
+     * Set light
+     * 
      * @param light the light to set
      */
     public final void setLight(int light) {
@@ -144,6 +172,8 @@ public class Result {
     }
 
     /**
+     * Get move
+     * 
      * @return the move
      */
     public final int getMove() {
@@ -152,6 +182,8 @@ public class Result {
     }
 
     /**
+     * Set move
+     * 
      * @param move the move to set
      */
     public final void setMove(int move) {
@@ -159,6 +191,11 @@ public class Result {
         this.move = move;
     }
 
+    /**
+     * Get readable temperature value
+     * 
+     * @return String
+     */
     public String getConvertedTemperature() {
 
         TemperatureType type = new TemperatureType();
@@ -167,6 +204,11 @@ public class Result {
         return String.format("%.2f", type.convert(this.temperature)) + type.unitShort;
     }
 
+    /**
+     * Get int light level
+     * 
+     * @return Integer
+     */
     public int getLightLevel() {
 
         LightType type = new LightType();
@@ -174,13 +216,18 @@ public class Result {
         return type.getLevel(this.light);
     }
 
+    /**
+     * Get int move status
+     * 
+     * @return Integer
+     */
     public int getMoveStatus() {
 
         MoveType type = new MoveType();
 
         return type.getStatus(this.move);
     }
-    
+
     @Override
     public String toString() {
 

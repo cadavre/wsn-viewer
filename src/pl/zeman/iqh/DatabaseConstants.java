@@ -1,6 +1,11 @@
 
 package pl.zeman.iqh;
 
+/**
+ * Constant Class with Database fields listing
+ * 
+ * @author Seweryn Zeman <seweryn.zeman@gmail.com>
+ */
 public class DatabaseConstants {
 
     public static final String HEALTH_TABLE = "node_health";
@@ -48,7 +53,7 @@ public class DatabaseConstants {
         public static final String TEMPERATURE = "temp";
 
         public static final String LIGHT = "light";
-        
+
         public static final String MOVE = "adc2";
 
     }

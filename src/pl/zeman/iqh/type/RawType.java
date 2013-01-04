@@ -18,11 +18,22 @@ public class RawType {
 
     double adding = 0;
 
+    /**
+     * Convert type value with preset factor and adding
+     * 
+     * @param reading
+     * @return Double
+     */
     public double convert(int reading) {
 
         return reading * factor + adding;
     }
 
+    /**
+     * Check if factor and adding can be pre set
+     * 
+     * @return Boolean
+     */
     public boolean isMultiunit() {
 
         return false;

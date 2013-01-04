@@ -25,6 +25,8 @@ public class Node {
     }
 
     /**
+     * Get ID
+     * 
      * @return the id
      */
     public final int getId() {
@@ -33,6 +35,8 @@ public class Node {
     }
 
     /**
+     * Set ID
+     * 
      * @param id the id to set
      */
     public final void setId(int id) {
@@ -41,6 +45,8 @@ public class Node {
     }
 
     /**
+     * Get X
+     * 
      * @return the x
      */
     public final double getX() {
@@ -49,6 +55,8 @@ public class Node {
     }
 
     /**
+     * Set X
+     * 
      * @param x the x coordinate to set
      */
     public final void setX(double x) {
@@ -57,6 +65,8 @@ public class Node {
     }
 
     /**
+     * Get Y
+     * 
      * @return the y
      */
     public final double getY() {
@@ -65,6 +75,8 @@ public class Node {
     }
 
     /**
+     * Set Y
+     * 
      * @param y the y coordinate to set
      */
     public final void setY(double y) {
@@ -73,6 +85,8 @@ public class Node {
     }
 
     /**
+     * Get Z
+     * 
      * @return the z
      */
     public final double getZ() {
@@ -81,6 +95,8 @@ public class Node {
     }
 
     /**
+     * Set Z
+     * 
      * @param z the z coordinate to set
      */
     public final void setZ(double z) {
@@ -89,6 +105,8 @@ public class Node {
     }
 
     /**
+     * Get Node name
+     * 
      * @return String
      */
     public String getName() {
@@ -97,6 +115,8 @@ public class Node {
     }
 
     /**
+     * Set node name
+     * 
      * @param String
      */
     public void setName(String name) {
@@ -111,6 +131,8 @@ public class Node {
     }
 
     /**
+     * If node is enabled
+     * 
      * @return the enabled
      */
     public boolean isEnabled() {
@@ -119,6 +141,8 @@ public class Node {
     }
 
     /**
+     * Set node enabled/disabled
+     * 
      * @param enabled the enabled to set
      */
     public void setEnabled(boolean enabled) {

@@ -17,7 +17,7 @@ import android.view.MenuItem;
 import android.widget.ProgressBar;
 
 /**
- * Dashboard Activity class
+ * Connection preferences Activity class
  * 
  * @author Seweryn Zeman <seweryn.zeman@gmail.com>
  */
@@ -101,6 +101,11 @@ public class ConnectionPreferenceActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Asynchronical task for just testing connection to database with JDBC
+     * 
+     * @author Seweryn Zeman <seweryn.zeman@gmail.com>
+     */
     private class TestConnectionTask extends AsyncTask<Bundle, String, Boolean> {
 
         @Override
