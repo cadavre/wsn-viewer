@@ -39,7 +39,6 @@ public class DashboardActivity extends BaseActivity implements OnItemClickListen
         if (!getApp().hasNecessaryPreferences()) {
             Intent connSettingIntent = new Intent(this, ConnectionPreferenceActivity.class);
             startActivity(connSettingIntent);
-            finish();
         } else if (getApp().hasInternetConnection()) {
             getApp().setConnectionPreferences();
         }
