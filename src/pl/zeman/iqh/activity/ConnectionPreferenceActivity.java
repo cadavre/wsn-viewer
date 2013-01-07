@@ -10,6 +10,7 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +23,8 @@ import android.widget.ProgressBar;
  * @author Seweryn Zeman <seweryn.zeman@gmail.com>
  */
 public class ConnectionPreferenceActivity extends BaseActivity {
+
+    AsyncTask currentTask;
 
     MenuItem miTest;
 
@@ -37,6 +40,16 @@ public class ConnectionPreferenceActivity extends BaseActivity {
     }
 
     @Override
+    protected void onPause() {
+
+        if (this.currentTask != null) {
+            this.currentTask.cancel(true);
+            this.currentTask = null;
+        }
+        super.onPause();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
@@ -46,7 +59,7 @@ public class ConnectionPreferenceActivity extends BaseActivity {
             case R.id.miTest:
                 getApp().setConnectionPreferences(true);
                 if (getApp().hasNecessaryPreferences()) {
-                    new TestConnectionTask().execute(getApp().connParams);
+                    currentTask = new TestConnectionTask().execute(getApp().connParams);
                 } else {
                     showOKDialog(R.string.error, R.string.error_not_necessary_settings,
                             new OnOKClickListener() {
@@ -145,6 +158,15 @@ public class ConnectionPreferenceActivity extends BaseActivity {
             }
 
             miTest.collapseActionView();
+            
+            currentTask = null;
+        }
+
+        @Override
+        protected void onCancelled() {
+
+            Log.d(TAG, "ASyncTask cancelled succesfully");
+            super.onCancelled();
         }
     }
 }

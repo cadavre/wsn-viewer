@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-import pl.zeman.iqh.R;
 import pl.zeman.iqh.DatabaseConstants;
 import pl.zeman.iqh.PreferencesConstants;
+import pl.zeman.iqh.R;
 import pl.zeman.iqh.dialog.OKDialogFragment.OnOKClickListener;
 import pl.zeman.iqh.entity.Health;
 import pl.zeman.iqh.entity.Node;
@@ -52,6 +52,8 @@ public class NodeAutoconfigActivity extends BaseActivity {
 
     SharedPreferences preferences;
 
+    AsyncTask currentTask;
+
     ArrayList<Node> nodes = new ArrayList<Node>();
 
     ArrayList<Result> results = new ArrayList<Result>();
@@ -80,9 +82,19 @@ public class NodeAutoconfigActivity extends BaseActivity {
             public void onClick(View v) {
 
                 miProgress.expandActionView();
-                new GetLasetsResultsFromTableTask().execute(getApp().connParams);
+                currentTask = new GetLasetsResultsFromTableTask().execute(getApp().connParams);
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+
+        if (this.currentTask != null) {
+            this.currentTask.cancel(true);
+            this.currentTask = null;
+        }
+        super.onPause();
     }
 
     @Override
@@ -466,9 +478,16 @@ public class NodeAutoconfigActivity extends BaseActivity {
             setReadData((ResultSet) results);
             setNodesList();
 
-            new GetLasetsHealthFromTableTask().execute(getApp().connParams);
+            currentTask = new GetLasetsHealthFromTableTask().execute(getApp().connParams);
 
             cleanupViews();
+        }
+
+        @Override
+        protected void onCancelled() {
+
+            Log.d(TAG, "ASyncTask cancelled succesfully");
+            super.onCancelled();
         }
     }
 
@@ -521,6 +540,15 @@ public class NodeAutoconfigActivity extends BaseActivity {
 
             setHealthData((ResultSet) results);
             updateNodesList();
+            
+            currentTask = null;
+        }
+
+        @Override
+        protected void onCancelled() {
+
+            Log.d(TAG, "ASyncTask cancelled succesfully");
+            super.onCancelled();
         }
     }
 }

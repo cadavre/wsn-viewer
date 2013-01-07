@@ -8,9 +8,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import pl.zeman.iqh.R;
 import pl.zeman.iqh.DatabaseConstants;
 import pl.zeman.iqh.PreferencesConstants;
+import pl.zeman.iqh.R;
 import pl.zeman.iqh.dialog.OKDialogFragment.OnOKClickListener;
 import pl.zeman.iqh.entity.Node;
 import pl.zeman.iqh.entity.Result;
@@ -51,6 +51,8 @@ public class HouseActivity extends BaseActivity {
 
     AssetsPagerAdapter adapter;
 
+    AsyncTask currentTask;
+
     ArrayList<Node> nodes = new ArrayList<Node>();
 
     ArrayList<Result> results = new ArrayList<Result>();
@@ -72,7 +74,17 @@ public class HouseActivity extends BaseActivity {
         this.pageListener = new OnPageChangeListener();
         this.vpSchemaContainer.setOnPageChangeListener(pageListener);
 
-        new GetLasetsResultsFromTableTask().execute(getApp().connParams);
+        currentTask = new GetLasetsResultsFromTableTask().execute(getApp().connParams);
+    }
+
+    @Override
+    protected void onPause() {
+
+        if (this.currentTask != null) {
+            this.currentTask.cancel(true);
+            this.currentTask = null;
+        }
+        super.onPause();
     }
 
     /**
@@ -403,6 +415,15 @@ public class HouseActivity extends BaseActivity {
             assets.add("pietro.png");
             HouseActivity.this.adapter = new AssetsPagerAdapter(getApplicationContext(), assets);
             vpSchemaContainer.setAdapter(HouseActivity.this.adapter);
+            
+            currentTask = null;
+        }
+
+        @Override
+        protected void onCancelled() {
+
+            Log.d(TAG, "ASyncTask cancelled succesfully");
+            super.onCancelled();
         }
     }
 }

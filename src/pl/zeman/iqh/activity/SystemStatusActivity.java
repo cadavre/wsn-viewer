@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-import pl.zeman.iqh.R;
 import pl.zeman.iqh.DatabaseConstants;
 import pl.zeman.iqh.PreferencesConstants;
+import pl.zeman.iqh.R;
 import pl.zeman.iqh.dialog.OKDialogFragment.OnOKClickListener;
 import pl.zeman.iqh.entity.Health;
 import pl.zeman.iqh.entity.Node;
@@ -44,6 +44,8 @@ public class SystemStatusActivity extends BaseActivity {
 
     SharedPreferences preferences;
 
+    AsyncTask currentTask;
+
     ArrayList<Node> nodes = new ArrayList<Node>();
 
     ArrayList<Result> results = new ArrayList<Result>();
@@ -66,7 +68,17 @@ public class SystemStatusActivity extends BaseActivity {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        new GetLasetsResultsFromTableTask().execute(getApp().connParams);
+        currentTask = new GetLasetsResultsFromTableTask().execute(getApp().connParams);
+    }
+
+    @Override
+    protected void onPause() {
+
+        if (this.currentTask != null) {
+            this.currentTask.cancel(true);
+            this.currentTask = null;
+        }
+        super.onPause();
     }
 
     @Override
@@ -379,7 +391,14 @@ public class SystemStatusActivity extends BaseActivity {
             setReadData((ResultSet) results);
             setNodesList();
 
-            new GetLasetsHealthFromTableTask().execute(getApp().connParams);
+            currentTask = new GetLasetsHealthFromTableTask().execute(getApp().connParams);
+        }
+
+        @Override
+        protected void onCancelled() {
+
+            Log.d(TAG, "ASyncTask cancelled succesfully");
+            super.onCancelled();
         }
     }
 
@@ -434,6 +453,15 @@ public class SystemStatusActivity extends BaseActivity {
             updateNodesList();
 
             miProgress.collapseActionView();
+            
+            currentTask = null;
+        }
+
+        @Override
+        protected void onCancelled() {
+
+            Log.d(TAG, "ASyncTask cancelled succesfully");
+            super.onCancelled();
         }
     }
 }
