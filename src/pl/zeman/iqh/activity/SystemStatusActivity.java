@@ -219,7 +219,7 @@ public class SystemStatusActivity extends BaseActivity {
             // write last reading time
             TextView tvResultsTime = (TextView) addon.findViewById(R.id.tvResultsTime);
             int year = result.getTime().get(Calendar.YEAR);
-            int month = result.getTime().get(Calendar.MONTH);
+            int month = result.getTime().get(Calendar.MONTH) + 1;
             int day = result.getTime().get(Calendar.DAY_OF_MONTH);
             int hour = result.getTime().get(Calendar.HOUR_OF_DAY);
             int minute = result.getTime().get(Calendar.MINUTE);
