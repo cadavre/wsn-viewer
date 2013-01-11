@@ -39,7 +39,7 @@ public class ConnectionPreferenceFragment extends PreferenceFragment implements
         // get list of saved Wi-Fi SSIDs
         ArrayList<CharSequence> ssids = new ArrayList<CharSequence>();
         CharSequence[] output = null;
-        if (wifiNetworks.size() != 0) {
+        if (wifiNetworks != null && wifiNetworks.size() != 0) {
             for (WifiConfiguration wifiConfiguration : wifiNetworks) {
                 ssids.add(wifiConfiguration.SSID);
             }
